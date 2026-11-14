@@ -128,5 +128,44 @@
       "Child is not drinking or passing less urine",
       "High fever lasting more than 3 days, unusual sleepiness, or a stiff neck"
     ]
+  },
+  "Keratosis pilaris": {
+    "severity": 1,
+    "summary": "Tiny, rough, skin-coloured or darker bumps (like permanent 'goosebumps'), usually on the upper arms, thighs or cheeks. Caused by keratin plugging hair follicles. Very common, harmless, often runs in families, and is not acne.",
+    "contagious": "No.",
+    "soothing_care": [
+      {
+        "tip": "Moisturise daily, especially after bathing; creams with urea or lactic acid can smooth the bumps.",
+        "caution": "These can sting on broken skin; start every other day."
+      },
+      {
+        "tip": "Use lukewarm water and a mild soap; avoid hard scrubbing.",
+        "caution": "Scrubbing and picking cause dark marks on brown skin."
+      },
+      {
+        "tip": "Do not treat it with acne or steroid creams.",
+        "caution": null
+      }
+    ],
+    "see_doctor_when": [
+      "Bumps are red, painful or have pus (possible infection)",
+      "It is spreading quickly or itching a lot",
+      "You're unsure it is keratosis pilaris"
+    ]
+  },
+  "Seborrheic keratosis": {
+    "severity": 2,
+    "summary": "A harmless, waxy, 'stuck-on' looking growth that is light brown to black, common after age 40. On brown skin, many small dark ones on the face are common (dermatosis papulosa nigra).",
+    "contagious": "No.",
+    "soothing_care": [
+      {
+        "tip": "Leave it alone: don't scratch, pick or try to remove it at home.",
+        "caution": "Home removal can cause infection and scarring."
+      }
+    ],
+    "see_doctor_when": [
+      "Any spot that is new, growing, changing colour or shape, bleeding or itchy - a doctor should check it, because some skin cancers can look similar",
+      "You want it removed for comfort or appearance"
+    ]
   }
 }

@@ -115,6 +115,8 @@ async def analyze(images: list[UploadFile] = File(...), symptoms: str = Form("{}
                 a["text"] += " Because steroid cream was used, the AI's result for these look-alike conditions is less reliable."
     base["followups"] = followups.pick(labels, bool(sym.get("is_child")))
     base["medicine_warning"] = medicines.warning(labels, sym)   # fixed rule, not AI
+    if pred["uncertain"]:   # no condition-specific reasons when the AI isn't confident (they'd read like a diagnosis)
+        base["medicine_warning"]["reasons"] = []
     return {**base, **pred, "display": display, "triage": triage}
 
 

@@ -73,29 +73,36 @@ function Scabies({ s }: { s: NonNullable<AnalyzeResult["scabies"]> }) {
   );
 }
 
-/** Red "don't self-medicate" banner. Fixed rule, not AI. */
+/** "Don't self-medicate" notice. Fixed rule, not AI. Calm on purpose: a firm caution, not an emergency.
+ *  Soft tint + deep-red edge; "danger" level only gets a slightly stronger edge and tint. */
 function MedicineBanner({ w }: { w: MedicineWarning }) {
-  const solid = w.level === "danger";
+  const strong = w.level === "danger";
+  const RED = "#8E2A2A"; // deep, muted brick red (not alarm red)
   return (
-    <section className={`rounded-[4px] p-5 sm:p-6 ${solid ? "bg-[#B01C1C] text-white" : "border-2 border-[#B01C1C] bg-[#B01C1C]/5"}`}>
-      <p className={`font-mono text-[0.72rem] uppercase tracking-[0.08em] ${solid ? "text-white/80" : "text-[#B01C1C]"}`}>
-        Strict warning · self-medication
+    <section
+      className="rounded-[4px] border border-rule p-5 sm:p-6"
+      style={{ borderLeft: `${strong ? 4 : 3}px solid ${RED}`, background: `color-mix(in srgb, ${RED} ${strong ? 7 : 4}%, var(--surface))` }}>
+      <p className="font-mono text-[0.72rem] uppercase tracking-[0.08em]" style={{ color: RED }}>
+        Important · medicines to avoid
       </p>
-      <p className="mt-1 font-serif text-[1.4rem] leading-snug">{w.title}.</p>
-      {w.used_text && <p className={`mt-2 font-semibold ${solid ? "" : "text-[#B01C1C]"}`}>{w.used_text}</p>}
-      <ul className={`mt-3 divide-y ${solid ? "divide-white/25 border-y border-white/25" : "divide-[#B01C1C]/20 border-y border-[#B01C1C]/20"}`}>
+      <p className="mt-1 font-serif text-[1.3rem] leading-snug">{w.title}.</p>
+      {w.used_text && <p className="mt-2 font-semibold" style={{ color: RED }}>{w.used_text}</p>}
+      <ul className="mt-3 divide-y divide-rule border-y border-rule">
         {w.medicines.map((m) => (
           <li key={m.name} className="grid gap-0.5 py-2 sm:grid-cols-[210px_1fr] sm:gap-4">
-            <span className="font-semibold">✕ {m.name}</span>
-            <span className={solid ? "text-white/85" : "text-muted"}>{m.examples}</span>
+            <span className="font-semibold"><span style={{ color: RED }}>✕</span> {m.name}</span>
+            <span className="text-muted">{m.examples}</span>
           </li>
         ))}
       </ul>
       {w.reasons.length > 0 && (
         <ul className="mt-3 space-y-1 text-[0.95rem]">{w.reasons.map((t) => <li key={t}>— {t}</li>)}</ul>
       )}
-      <p className={`mt-3 text-[0.95rem] ${solid ? "text-white/90" : ""}`}>{w.why}</p>
-      <p className="mt-2 text-[0.95rem] font-semibold">{w.do_instead}</p>
+      <details className="mt-3 text-[0.95rem]">
+        <summary className="cursor-pointer text-muted underline underline-offset-4">Why this matters</summary>
+        <p className="mt-2">{w.why}</p>
+      </details>
+      <p className="mt-3 text-[0.95rem] font-semibold">{w.do_instead}</p>
     </section>
   );
 }
@@ -148,8 +155,6 @@ export default function ResultView({ r, photo, actions, meta }:
           </div>
         )}
 
-        {r.medicine_warning?.show && <MedicineBanner w={r.medicine_warning} />}
-
         {(r.alerts ?? []).filter((a) => a.level !== "info").map((a) => (
           <Block key={a.kind} label={a.level === "urgent" ? "Urgent" : "Please note"} tone="warn">
             <p className="font-semibold">{a.title}</p><p className="text-[0.95rem]">{a.text}</p>
@@ -165,18 +170,30 @@ export default function ResultView({ r, photo, actions, meta }:
           </Block>
         )}
         {r.ood.rejected && r.ood.reason && <Block label="Photo check"><p>{OOD_MSG[r.ood.reason]}</p></Block>}
-        {r.uncertain && (
-          <p className="text-muted">
-            {r.ood.unusual
-              ? "This photo looks different from the photos the AI learned from, so treat the possibilities below with caution."
-              : "The AI couldn't match this to one condition with enough confidence. The possibilities below are for discussing with a doctor."}
-          </p>
+        {r.uncertain && !r.ood.rejected && (
+          <section className="rounded-[4px] border border-foreground bg-surface p-5 sm:p-6">
+            <p className="eyebrow !text-foreground">No reliable result</p>
+            <p className="mt-1 font-serif text-[1.3rem] leading-snug">
+              {r.ood.unusual
+                ? "This photo looks different from the photos the AI learned from."
+                : "The AI couldn't decide between conditions."}
+            </p>
+            <p className="mt-2">
+              This may be a condition LuminaSkin doesn&apos;t cover. <b>Don&apos;t treat the AI&apos;s guesses as a result</b>, and
+              don&apos;t start any medicine based on them.
+            </p>
+            <ol className="mt-4 space-y-1.5 border-t border-rule pt-3">
+              <li className="grid grid-cols-[28px_1fr]"><span className="num pt-0.5">01</span><span>See a doctor (dermatologist or your family doctor).</span></li>
+              <li className="grid grid-cols-[28px_1fr]"><span className="num pt-0.5">02</span><span>Take the <b>Doctor PDF</b> below, which has your photos and answers.</span></li>
+              <li className="grid grid-cols-[28px_1fr]"><span className="num pt-0.5">03</span><span>Retake the scan in daylight if the photo was unclear.</span></li>
+            </ol>
+          </section>
         )}
 
-        {ranked.length > 0 && (
+        {ranked.length > 0 && !r.uncertain && (
           <section className="rule-top">
             {ranked.map((t, i) => (
-              <div key={t.label} className={`border-b border-rule py-4 ${r.uncertain ? "opacity-80" : ""}`}>
+              <div key={t.label} className="border-b border-rule py-4">
                 <div className="grid grid-cols-[34px_1fr_auto] items-baseline gap-2">
                   <span className="num">{String(i + 1).padStart(2, "0")}</span>
                   <span className={`font-serif text-[1.2rem] leading-tight ${i === 0 ? "font-semibold" : ""}`}>{t.label}</span>
@@ -199,10 +216,31 @@ export default function ResultView({ r, photo, actions, meta }:
           </section>
         )}
 
+        {ranked.length > 0 && r.uncertain && (
+          <details className="group border-t border-rule pt-3">
+            <summary className="flex cursor-pointer list-none items-center justify-between text-muted">
+              <span className="text-[0.95rem] underline underline-offset-4">Show what the AI considered (low confidence)</span>
+              <span className="num transition-transform group-open:rotate-45">+</span>
+            </summary>
+            <div className="mt-3 rounded-[4px] border border-dashed border-rule p-4 text-muted">
+              <p className="num">LOW-CONFIDENCE GUESSES · NOT A RESULT</p>
+              <ul className="mt-2 divide-y divide-rule">
+                {ranked.map((t) => (
+                  <li key={t.label} className="flex justify-between py-2 text-[0.95rem]">
+                    <span>{t.label}{t.members ? ` (${t.members.map((m) => m.label).join(" / ")})` : ""}</span>
+                    <span className="font-mono">{pct(t.prob)}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-2 text-sm">For your doctor only. These are shown in the Doctor PDF, marked as not confident.</p>
+            </div>
+          </details>
+        )}
+
         {r.hints && (r.hints.fits.length > 0 || r.hints.also_consider.length > 0) && (
           <Block label="Hints from your answers">
             {r.hints.fits.map((f) => (
-              <p key={f.label} className="py-1"><b>Your answers fit {f.label}</b>, one of the possibilities above <span className="text-muted">({f.reasons.join(", ")})</span>.</p>
+              <p key={f.label} className="py-1"><b>Your answers fit {f.label}</b>, {r.uncertain ? "one of the AI's low-confidence guesses" : "one of the possibilities above"} <span className="text-muted">({f.reasons.join(", ")})</span>.</p>
             ))}
             {r.hints.also_consider.map((a) => <AlsoCard key={a.name} a={a} />)}
             <p className="num mt-3">{r.hints.note.toUpperCase()}</p>
@@ -232,6 +270,8 @@ export default function ResultView({ r, photo, actions, meta }:
         {(r.alerts ?? []).filter((a) => a.level === "info").map((a) => (
           <Block key={a.kind} label="Good to know"><p className="font-semibold">{a.title}</p><p className="text-[0.95rem] text-muted">{a.text}</p></Block>
         ))}
+
+        {r.medicine_warning?.show && <MedicineBanner w={r.medicine_warning} />}
 
         {actions}
         <p className="text-sm text-muted">{r.disclaimer}</p>
