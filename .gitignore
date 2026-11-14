@@ -1,0 +1,25 @@
+# secrets
+.env
+*.env
+
+# environments / build output
+.venv/
+__pycache__/
+node_modules/
+.next/
+.DS_Store
+
+# data: photos, embeddings and raw dataset tables are NOT re-shared (dataset licences)
+ml/data/*
+!ml/data/class_map*.json
+!ml/data/split*.json
+!ml/data/label_counts.csv
+ml/data/fitz/*
+!ml/data/fitz/
+!ml/data/fitz/used_photos.csv
+
+# model folder still training
+ml/models_v2b/
+
+# large prediction dumps
+*.npz

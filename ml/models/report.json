@@ -1,0 +1,82 @@
+{
+  "classes": [
+    "Acne",
+    "Contact Dermatitis",
+    "Eczema",
+    "Folliculitis",
+    "Herpes Simplex",
+    "Herpes Zoster",
+    "Impetigo",
+    "Insect Bite",
+    "Pityriasis Rosea",
+    "Psoriasis",
+    "Scabies",
+    "Tinea",
+    "Tinea Versicolor",
+    "Urticaria"
+  ],
+  "n_test_cases": 307,
+  "n_test_dark": 70,
+  "test": {
+    "fused": {
+      "macro_recall": 0.541,
+      "top3": 0.879,
+      "macro_recall_IV-VI": 0.503,
+      "top3_IV-VI": 0.829
+    },
+    "image_only": {
+      "macro_recall": 0.523,
+      "top3": 0.886,
+      "macro_recall_IV-VI": 0.476,
+      "top3_IV-VI": 0.829
+    },
+    "symptoms_only": {
+      "macro_recall": 0.233,
+      "top3": 0.492,
+      "macro_recall_IV-VI": 0.245,
+      "top3_IV-VI": 0.543
+    },
+    "derm_lr_only": {
+      "macro_recall": 0.541,
+      "top3": 0.86,
+      "macro_recall_IV-VI": 0.515,
+      "top3_IV-VI": 0.814
+    },
+    "effnet_only": {
+      "macro_recall": 0.29,
+      "top3": 0.736,
+      "macro_recall_IV-VI": 0.325,
+      "top3_IV-VI": 0.7
+    }
+  },
+  "val_oof_fused": {
+    "macro_recall": 0.525,
+    "top3": 0.889,
+    "macro_recall_IV-VI": 0.528,
+    "top3_IV-VI": 0.871
+  },
+  "val_oof_fused_no_scabies": {
+    "macro_recall": 0.566,
+    "top3": 0.891,
+    "macro_recall_IV-VI": 0.528,
+    "top3_IV-VI": 0.871
+  },
+  "test_v1_cases_fused": {
+    "macro_recall": 0.583,
+    "top3": 0.885,
+    "macro_recall_IV-VI": 0.503,
+    "top3_IV-VI": 0.829
+  },
+  "val_bootstrap_fused_minus_best_single_IV-VI": {
+    "best_single": "derm_lr",
+    "mean": 0.033,
+    "ci95": [
+      -0.081,
+      0.149
+    ]
+  },
+  "p_min": 0.45,
+  "ood_thr": 112.52152252197266,
+  "min_skin": 0.1,
+  "lr_C": 0.01
+}

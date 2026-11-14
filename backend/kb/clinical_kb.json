@@ -1,0 +1,406 @@
+{
+  "_note": "General patient information written for triage; reviewed against standard references (DermNet, NHS, AAD) by the team before demo. Keys match model class names exactly.",
+  "Acne": {
+    "summary": "Blocked, inflamed oil glands causing blackheads, whiteheads, red bumps or pus spots on the face, chest or back. On brown skin, acne often leaves dark marks that can last months after the spot heals.",
+    "contagious": "No.",
+    "steroid_warning": "Do NOT apply steroid creams or 'fairness' creams containing steroids to the face. They can cause or worsen acne (steroid acne) and thin the skin.",
+    "soothing_care": [
+      {
+        "tip": "Wash twice a day with a gentle, fragrance-free cleanser; don't scrub.",
+        "caution": null
+      },
+      {
+        "tip": "Use an oil-free, 'non-comedogenic' moisturiser and sunscreen to limit dark marks.",
+        "caution": null
+      },
+      {
+        "tip": "Benzoyl peroxide 2.5% wash or gel from a pharmacy.",
+        "caution": "Can dry or irritate skin and bleach cloth; start every other day."
+      },
+      {
+        "tip": "Don't squeeze or pick spots.",
+        "caution": "Picking causes scars and darker marks."
+      }
+    ],
+    "see_doctor_when": [
+      "Painful deep lumps or cysts",
+      "Scarring or dark marks are forming",
+      "No improvement after 2-3 months of care",
+      "Sudden acne in adulthood or with irregular periods"
+    ]
+  },
+  "Contact Dermatitis": {
+    "summary": "A skin reaction to something that touched the skin, such as soap, detergent, cosmetics, hair dye, metal jewellery, rubber or plants. Itchy, burning rash where the contact happened; on brown skin it may look dark brown, purple or grey.",
+    "contagious": "No.",
+    "steroid_warning": "Use a steroid cream only if a doctor or pharmacist advises, for a few days. Never on the face or genitals without a doctor, and never on a suspected fungal rash.",
+    "soothing_care": [
+      {
+        "tip": "Find and stop the trigger (new soap, detergent, cream, jewellery, hair dye).",
+        "caution": null
+      },
+      {
+        "tip": "Rinse the area with plain cool water, then pat dry.",
+        "caution": null
+      },
+      {
+        "tip": "Cool compress for 10-15 minutes for itch and burning.",
+        "caution": null
+      },
+      {
+        "tip": "Calamine lotion or a fragrance-free moisturiser.",
+        "caution": "Not on broken or oozing skin."
+      },
+      {
+        "tip": "Aloe vera gel on dry, irritated skin.",
+        "caution": "Patch-test first; stop if it stings."
+      }
+    ],
+    "see_doctor_when": [
+      "Rash on the face, eyes or genitals",
+      "Blisters over a large area",
+      "Pus, crusting or fever (possible infection)",
+      "Not better after 2 weeks of avoiding the trigger"
+    ]
+  },
+  "Eczema": {
+    "summary": "An itchy, dry, inflamed skin condition that comes and goes. On brown skin it may look dark brown, purple or grey and can leave darker or lighter patches after healing.",
+    "contagious": "No.",
+    "steroid_warning": "Only use steroid creams if prescribed by a doctor, for the time advised. Never use them on suspected fungal rashes.",
+    "soothing_care": [
+      {
+        "tip": "Moisturise often with a fragrance-free cream or plain petroleum jelly.",
+        "caution": null
+      },
+      {
+        "tip": "Coconut oil as a moisturiser.",
+        "caution": "Patch-test on a small area first; not on broken or oozing skin."
+      },
+      {
+        "tip": "Colloidal oatmeal bath or lukewarm (not hot) short baths; pat skin dry.",
+        "caution": null
+      },
+      {
+        "tip": "Cool compress for itch; keep nails short and avoid scratching.",
+        "caution": null
+      },
+      {
+        "tip": "Wear soft cotton; avoid wool and harsh soaps.",
+        "caution": null
+      }
+    ],
+    "see_doctor_when": [
+      "Skin is oozing, crusting or has pus (possible infection)",
+      "Painful clustered blisters (needs urgent care)",
+      "Itch disturbs sleep",
+      "Not improving with moisturising"
+    ]
+  },
+  "Folliculitis": {
+    "summary": "Inflamed hair follicles: small itchy or tender bumps or pus spots, often where you shave or sweat (beard, thighs, buttocks, back). Usually bacterial, sometimes fungal.",
+    "contagious": "Sometimes - bacterial folliculitis can spread through shared razors, towels and hot tubs.",
+    "steroid_warning": "Do NOT use steroid creams; they can make bacterial or fungal folliculitis worse.",
+    "soothing_care": [
+      {
+        "tip": "Warm compress for 10-15 minutes, 2-3 times a day.",
+        "caution": null
+      },
+      {
+        "tip": "Wash gently with soap and water; dry well.",
+        "caution": null
+      },
+      {
+        "tip": "Stop shaving the area for a few weeks; never share razors or towels.",
+        "caution": null
+      },
+      {
+        "tip": "Wear loose, breathable clothes and change out of sweaty clothes quickly.",
+        "caution": null
+      }
+    ],
+    "see_doctor_when": [
+      "A large, painful lump (boil)",
+      "Spreading redness or warmth",
+      "Fever",
+      "Keeps coming back"
+    ]
+  },
+  "Herpes Simplex": {
+    "summary": "A common viral infection causing groups of small painful blisters, usually on the lips (cold sores) or genitals, that crust over in 1-2 weeks. It can come back from time to time.",
+    "contagious": "Yes - through direct contact (kissing, sexual contact, shared cups or lip balm), especially while blisters are present.",
+    "steroid_warning": "Do NOT apply steroid creams; they can make the infection spread.",
+    "soothing_care": [
+      {
+        "tip": "Keep the area clean and dry; wash hands after touching it.",
+        "caution": null
+      },
+      {
+        "tip": "Cool compress for pain.",
+        "caution": null
+      },
+      {
+        "tip": "Petroleum jelly on cold sores to stop cracking.",
+        "caution": "Use your own; don't share."
+      },
+      {
+        "tip": "Don't share towels, utensils or lip products; avoid kissing until healed.",
+        "caution": null
+      }
+    ],
+    "see_doctor_when": [
+      "Any sores near the eye (urgent)",
+      "First outbreak - antiviral tablets work best when started early",
+      "Widespread blisters or fever",
+      "Weak immune system, pregnancy, or contact with a newborn"
+    ]
+  },
+  "Herpes Zoster": {
+    "summary": "Shingles: a painful, burning band of blisters on ONE side of the body or face, caused by the chickenpox virus waking up again. Pain can start a few days before the rash.",
+    "contagious": "Shingles itself isn't caught, but fluid from the blisters can give chickenpox to people who never had it. Keep it covered; avoid pregnant women, newborns and people with weak immunity until crusted.",
+    "steroid_warning": "Do NOT apply steroid creams to the rash.",
+    "soothing_care": [
+      {
+        "tip": "Keep the rash clean, dry and loosely covered.",
+        "caution": null
+      },
+      {
+        "tip": "Cool compress or calamine lotion for itch and burning.",
+        "caution": "Not on open, raw skin."
+      },
+      {
+        "tip": "Wear loose cotton clothes.",
+        "caution": null
+      }
+    ],
+    "see_doctor_when": [
+      "As soon as possible - antiviral tablets work best within 3 days of the rash",
+      "Rash on the forehead, near the eye or tip of the nose (urgent)",
+      "Age over 50 or weak immune system",
+      "Severe pain, fever or spreading rash"
+    ]
+  },
+  "Impetigo": {
+    "summary": "A bacterial skin infection, common in children: red sores that burst and form honey-coloured crusts, often around the nose and mouth. On brown skin the area may look dark rather than red.",
+    "contagious": "Yes - very. Spreads through touch, towels and clothes. Children should stay home until 48 hours after starting treatment or until sores crust over.",
+    "steroid_warning": "Do NOT use steroid creams; they make bacterial infections worse.",
+    "soothing_care": [
+      {
+        "tip": "Gently wash crusts with soap and warm water, then pat dry with a clean towel.",
+        "caution": null
+      },
+      {
+        "tip": "Cover the sores; keep nails short; wash hands often.",
+        "caution": null
+      },
+      {
+        "tip": "Use separate towels and wash bedding in hot water.",
+        "caution": null
+      }
+    ],
+    "see_doctor_when": [
+      "Impetigo usually needs an antibiotic cream or tablets - see a doctor",
+      "Fever or feeling unwell",
+      "Sores spreading or deep sores",
+      "Dark urine or puffy face after the rash (rare kidney problem)"
+    ]
+  },
+  "Insect Bite": {
+    "summary": "Itchy, raised bumps from mosquitoes, bedbugs, fleas or other insects, often in groups or lines on exposed skin. On brown skin they can leave dark marks for weeks.",
+    "contagious": "No. Many bites in a line or in bed may mean bedbugs; very itchy rash between fingers may be scabies instead.",
+    "steroid_warning": "A steroid cream is rarely needed; use one only if a pharmacist or doctor advises, for a few days.",
+    "soothing_care": [
+      {
+        "tip": "Wash with soap and water.",
+        "caution": null
+      },
+      {
+        "tip": "Cold compress or ice wrapped in cloth for 10 minutes.",
+        "caution": null
+      },
+      {
+        "tip": "Calamine lotion or aloe vera gel for itch.",
+        "caution": "Patch-test aloe first."
+      },
+      {
+        "tip": "Don't scratch; keep nails short.",
+        "caution": "Scratching can cause infection and dark marks."
+      },
+      {
+        "tip": "Use mosquito nets and repellent.",
+        "caution": null
+      }
+    ],
+    "see_doctor_when": [
+      "Swelling of lips, face or throat, or trouble breathing (emergency)",
+      "Spreading redness, warmth, pus or fever (infection)",
+      "Many itchy bites in family members (possible bedbugs or scabies)"
+    ]
+  },
+  "Pityriasis Rosea": {
+    "summary": "A harmless rash that usually starts with one larger oval 'herald patch', followed by many smaller oval patches on the chest and back. It fades by itself in 6-12 weeks. On brown skin it can be more bumpy and leave dark marks.",
+    "contagious": "Not considered contagious.",
+    "steroid_warning": "Steroid creams are only for itch, and only if a doctor advises.",
+    "soothing_care": [
+      {
+        "tip": "Moisturise with a fragrance-free cream.",
+        "caution": null
+      },
+      {
+        "tip": "Lukewarm baths, colloidal oatmeal, and mild soap.",
+        "caution": null
+      },
+      {
+        "tip": "Wear loose cotton clothes; avoid heavy exercise if sweat makes it itch.",
+        "caution": null
+      }
+    ],
+    "see_doctor_when": [
+      "You are pregnant (always get checked)",
+      "Rash on palms or soles (other conditions need ruling out)",
+      "Lasts longer than 3 months",
+      "Very itchy or unsure of the diagnosis"
+    ]
+  },
+  "Psoriasis": {
+    "summary": "A long-term immune skin condition causing thick, scaly patches, often on elbows, knees and scalp. On brown skin patches may look purple, dark brown or grey with silvery scale.",
+    "contagious": "No.",
+    "steroid_warning": "Steroid creams should only be used as prescribed by a doctor. Stopping strong steroids suddenly can trigger flares.",
+    "soothing_care": [
+      {
+        "tip": "Moisturise thickly every day, especially after bathing.",
+        "caution": null
+      },
+      {
+        "tip": "Coconut oil to soften scales.",
+        "caution": "Patch-test first; not on cracked or bleeding skin."
+      },
+      {
+        "tip": "Aloe vera gel on dry patches.",
+        "caution": "Patch-test first; stop if it stings or reddens."
+      },
+      {
+        "tip": "Short lukewarm baths; avoid scratching or picking scales.",
+        "caution": null
+      }
+    ],
+    "see_doctor_when": [
+      "Joint pain or swelling",
+      "Large areas of skin are affected",
+      "Sudden widespread flare or skin all over red and peeling (urgent)"
+    ]
+  },
+  "Tinea": {
+    "summary": "A common fungal skin infection (ringworm). Often a ring-shaped, itchy patch with a raised edge; on brown skin the edge may look dark brown or grey rather than red. Thrives in heat, sweat and humidity, often in the groin, waist and folds.",
+    "contagious": "Yes - spreads by skin contact and shared towels, clothes or bedding.",
+    "steroid_warning": "Do NOT use steroid creams or 'combination' creams containing steroids (often sold over the counter). They can make fungal infections spread, become harder to treat and keep coming back.",
+    "soothing_care": [
+      {
+        "tip": "Keep the area clean and fully dry, especially skin folds.",
+        "caution": null
+      },
+      {
+        "tip": "Wear loose cotton clothes and change sweaty clothes quickly.",
+        "caution": null
+      },
+      {
+        "tip": "Wash towels and bedding separately in hot water; don't share them.",
+        "caution": null
+      },
+      {
+        "tip": "Treat everyone in the family who has itchy patches at the same time.",
+        "caution": null
+      }
+    ],
+    "see_doctor_when": [
+      "It is spreading or not improving after 2 weeks",
+      "It affects the scalp, face or nails",
+      "You have diabetes or a weak immune system",
+      "You have already used steroid creams on it"
+    ]
+  },
+  "Tinea Versicolor": {
+    "summary": "A harmless yeast overgrowth causing flat lighter or darker patches with fine scale on the chest, back and upper arms. Very common in hot, humid weather. Skin colour can take months to even out after treatment.",
+    "contagious": "No.",
+    "steroid_warning": "Do NOT use steroid creams; they can make it spread.",
+    "soothing_care": [
+      {
+        "tip": "Anti-dandruff shampoo (ketoconazole or selenium sulfide) used as a body wash: leave on 5-10 minutes, then rinse.",
+        "caution": "Can irritate; avoid eyes and broken skin."
+      },
+      {
+        "tip": "Keep skin dry; wear loose cotton clothes.",
+        "caution": null
+      },
+      {
+        "tip": "Avoid oily lotions on affected areas.",
+        "caution": null
+      }
+    ],
+    "see_doctor_when": [
+      "No improvement after 4 weeks of treatment",
+      "Widespread patches",
+      "Keeps coming back every summer (preventive treatment may help)"
+    ]
+  },
+  "Urticaria": {
+    "summary": "Hives: itchy, raised welts that appear and move around within hours, often triggered by foods, medicines, infections, heat or pressure. On brown skin welts may be skin-coloured or slightly darker rather than red.",
+    "contagious": "No.",
+    "steroid_warning": "Steroid creams don't help hives much; do not take steroid tablets without a doctor.",
+    "soothing_care": [
+      {
+        "tip": "Cool compress or cool shower.",
+        "caution": null
+      },
+      {
+        "tip": "Loose, light clothing; avoid heat and tight straps.",
+        "caution": null
+      },
+      {
+        "tip": "Colloidal oatmeal bath for itch.",
+        "caution": null
+      },
+      {
+        "tip": "Note any new food, medicine or exposure before it started and avoid it.",
+        "caution": null
+      },
+      {
+        "tip": "A non-drowsy antihistamine tablet from a pharmacist.",
+        "caution": "Ask a pharmacist first if pregnant, a child, or on other medicines."
+      }
+    ],
+    "see_doctor_when": [
+      "Swelling of lips, tongue or throat, trouble breathing or feeling faint (emergency)",
+      "Hives lasting more than 6 weeks",
+      "Hives with fever or joint pain",
+      "Started after a new medicine"
+    ]
+  },
+  "Scabies": {
+    "summary": "A very itchy rash caused by tiny mites burrowing into the skin. Itch is usually worse at night. Look for small bumps or short wavy lines between fingers, wrists, waist, armpits and groin. On brown skin bumps may look dark brown or skin-coloured. Very common in crowded homes, hostels and in hot climates.",
+    "contagious": "Yes - spreads through close skin contact and shared bedding or clothes. Everyone in the household and close contacts should be treated at the SAME time, even without itch.",
+    "steroid_warning": "Do NOT use steroid creams; they hide the itch but let the mites spread and can make the rash worse.",
+    "soothing_care": [
+      {
+        "tip": "Wash all clothes, towels and bedding used in the last 3 days in hot water and dry in the sun.",
+        "caution": null
+      },
+      {
+        "tip": "Items that can't be washed: seal in a plastic bag for 3 days.",
+        "caution": null
+      },
+      {
+        "tip": "Keep nails short and avoid scratching.",
+        "caution": "Scratching can cause infection."
+      },
+      {
+        "tip": "Cool compress or calamine lotion for itch.",
+        "caution": "Itch can last 2-4 weeks after successful treatment; that's normal."
+      }
+    ],
+    "see_doctor_when": [
+      "Scabies needs a prescription treatment (cream or tablets) - see a doctor or pharmacist",
+      "Pus, crusting or fever (infection)",
+      "Thick crusted skin (crusted scabies - very contagious)",
+      "Babies, elderly, or pregnant family members are affected"
+    ]
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "classes": [
+    "Acne",
+    "Contact Dermatitis",
+    "Eczema",
+    "Folliculitis",
+    "Herpes Simplex",
+    "Herpes Zoster",
+    "Impetigo",
+    "Insect Bite",
+    "Pityriasis Rosea",
+    "Psoriasis",
+    "Tinea",
+    "Tinea Versicolor",
+    "Urticaria"
+  ],
+  "raw_to_class": {
+    "Eczema": "Eczema",
+    "Acute dermatitis, NOS": "Eczema",
+    "Acute and chronic dermatitis": "Eczema",
+    "Chronic dermatitis, NOS": "Eczema",
+    "Allergic Contact Dermatitis": "Contact Dermatitis",
+    "Irritant Contact Dermatitis": "Contact Dermatitis",
+    "CD - Contact dermatitis": "Contact Dermatitis",
+    "Urticaria": "Urticaria",
+    "Insect Bite": "Insect Bite",
+    "Folliculitis": "Folliculitis",
+    "Psoriasis": "Psoriasis",
+    "Tinea": "Tinea",
+    "Impetigo": "Impetigo",
+    "Herpes Zoster": "Herpes Zoster",
+    "Acne": "Acne",
+    "Herpes Simplex": "Herpes Simplex",
+    "Pityriasis rosea": "Pityriasis Rosea",
+    "Tinea Versicolor": "Tinea Versicolor"
+  },
+  "conf_cutoff": 0.5
+}

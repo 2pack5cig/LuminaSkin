@@ -1,0 +1,212 @@
+top_label,I-III,IV-VI,unknown,total
+Eczema,369,109,10,488
+Allergic Contact Dermatitis,211,47,12,270
+Urticaria,155,53,6,214
+Insect Bite,156,24,5,185
+Folliculitis,112,30,0,142
+Psoriasis,80,23,6,109
+Tinea,66,21,6,93
+Impetigo,51,17,1,69
+Herpes Zoster,54,13,1,68
+Pigmented purpuric eruption,53,9,0,62
+Acne,42,19,0,61
+Drug Rash,47,10,1,58
+Herpes Simplex,34,19,2,55
+"Acute dermatitis, NOS",40,6,0,46
+Pityriasis rosea,30,14,0,44
+Irritant Contact Dermatitis,30,7,2,39
+Tinea Versicolor,30,7,0,37
+CD - Contact dermatitis,32,4,0,36
+Lichen Simplex Chronicus,19,13,0,32
+Keratosis pilaris,22,10,0,32
+Rosacea,26,2,1,29
+Viral Exanthem,26,2,1,29
+Lichen planus/lichenoid eruption,15,12,1,28
+O/E - ecchymoses present,26,2,0,28
+Granuloma annulare,22,5,0,27
+Leukocytoclastic Vasculitis,22,3,0,25
+Hypersensitivity,19,4,1,24
+Photodermatitis,20,2,1,23
+"Abrasion, scrape, or scab",20,3,0,23
+Prurigo nodularis,16,6,0,22
+Scabies,16,5,0,21
+Purpura,14,7,0,21
+Stasis Dermatitis,16,5,0,21
+Verruca vulgaris,9,7,4,20
+Intertrigo,16,2,1,19
+Acute and chronic dermatitis,10,9,0,19
+Molluscum Contagiosum,12,5,1,18
+Scar Condition,9,9,0,18
+"Chronic dermatitis, NOS",1,16,0,17
+Abscess,11,6,0,17
+Cellulitis,14,3,0,17
+Perioral Dermatitis,13,2,0,15
+Miliaria,8,7,0,15
+Seborrheic Dermatitis,10,3,1,14
+Actinic Keratosis,10,1,1,12
+Cutaneous lupus,8,2,0,10
+Inflicted skin lesions,10,0,0,10
+Lichen nitidus,5,4,0,9
+Hemangioma,8,1,0,9
+Xerosis,6,3,0,9
+SCC/SCCIS,8,0,0,8
+Ecthyma,5,3,0,8
+Infected eczema,5,3,0,8
+SK/ISK,4,3,0,7
+Erythema multiforme,5,2,0,7
+Pityriasis lichenoides,6,1,0,7
+Livedo reticularis,5,2,0,7
+Erythema ab igne,4,2,0,6
+Confluent and reticulate papillomatosis,3,3,0,6
+Cutaneous T Cell Lymphoma,2,3,1,6
+Cutaneous sarcoidosis,2,4,0,6
+Superficial wound of body region,6,0,0,6
+Hidradenitis,3,2,1,6
+Dermatofibroma,5,1,0,6
+Basal Cell Carcinoma,5,0,1,6
+Post-Inflammatory hyperpigmentation,1,5,0,6
+Cyst,1,4,0,5
+Skin infection,4,1,0,5
+Burn of skin,4,1,0,5
+Onychomycosis,3,2,0,5
+Melanocytic Nevus,5,0,0,5
+Traumatic petechiae,5,0,0,5
+Lichenified eczematous dermatitis,1,3,0,4
+Melasma,2,2,0,4
+Lichen spinulosus,1,3,0,4
+O/E - petechiae on skin,4,0,0,4
+Keratosis,2,2,0,4
+Paronychia,1,3,0,4
+Candida intertrigo,3,1,0,4
+Acanthosis nigricans,2,2,0,4
+Cutaneous larva migrans,3,1,0,4
+Geographic tongue,2,2,0,4
+Contact purpura,3,0,0,3
+O/E - pustules,3,0,0,3
+Porokeratosis,2,0,1,3
+Bullous Pemphigoid,2,1,0,3
+Remove from labeling tool,3,0,0,3
+Lichen striatus,1,2,0,3
+Pityriasis alba,2,1,0,3
+Annular erythema,2,0,0,2
+Chilblain,2,0,0,2
+Lichenoid myxedema,0,2,0,2
+Venous Stasis Ulcer,2,0,0,2
+Animal bite - wound,2,0,0,2
+Clavus,2,0,0,2
+Amyloidosis of skin,1,1,0,2
+Vitiligo,0,2,0,2
+Milia,0,2,0,2
+Morphea/Scleroderma,2,0,0,2
+Acute constitutional eczema,2,0,0,2
+O/E - petechiae present,2,0,0,2
+Perforating dermatosis,1,1,0,2
+Parapsoriasis,1,1,0,2
+Koebner phenomenon,2,0,0,2
+Grover's disease,2,0,0,2
+Idiopathic guttate hypomelanosis,0,2,0,2
+Dermatitis herpetiformis,2,0,0,2
+Hand foot and mouth disease,2,0,0,2
+Hematoma of skin,2,0,0,2
+Foot ulcer,1,1,0,2
+Rheumatoid nodule,1,0,1,2
+Erythema nodosum,2,0,0,2
+Skin and soft tissue atypical mycobacterial infection,2,0,0,2
+Erythema gyratum repens,0,2,0,2
+Pyogenic granuloma,2,0,0,2
+Epidermal nevus,1,1,0,2
+AKV - Acrokeratosis verruciformis,1,1,0,2
+Prurigo,1,1,0,2
+Deep fungal infection,1,1,0,2
+Kaposi's sarcoma of skin,1,1,0,2
+Inverse psoriasis,1,1,0,2
+Syphilis,1,0,1,2
+Sweet syndrome,1,0,0,1
+Phytophotodermatitis,1,0,0,1
+Pemphigus vulgaris,0,1,0,1
+Post-Inflammatory hypopigmentation,0,1,0,1
+varicose vein,1,0,0,1
+Petechiae,1,0,0,1
+unilateral laterothoracic exanthem,1,0,0,1
+relapsing polychondritis,1,0,0,1
+Photocontact dermatitis [berloque dermatitis],1,0,0,1
+Traction alopecia,0,1,0,1
+Traumatic blister,0,0,1,1
+hyperlinear palm,0,1,0,1
+pathergy,1,0,0,1
+Poisoning by nematocyst,1,0,0,1
+Traumatic ulcer,1,0,0,1
+Skin lesion in drug addict,1,0,0,1
+Pyoderma,1,0,0,1
+Pincer nail deformity,0,1,0,1
+TMEP - telangiectasia macularis eruptiva perstans,1,0,0,1
+Skin ulcer,1,0,0,1
+Pityriasis rubra pilaris,1,0,0,1
+Poikiloderma,1,0,0,1
+Vasculitis of the skin,1,0,0,1
+Sunburn,1,0,0,1
+Varicose veins of lower extremity,1,0,0,1
+Pressure ulcer,0,1,0,1
+Keratolysis exfoliativa,1,0,0,1
+Onychodystrophy,1,0,0,1
+Candida,1,0,0,1
+Erythema dyschromicum perstans,0,1,0,1
+Eruptive xanthoma,1,0,0,1
+Eruptive odontogenic cyst,1,0,0,1
+Erosion of skin,1,0,0,1
+Elephantiasis nostras,0,0,1,1
+Ecthyma gangrenosum,1,0,0,1
+Diffuse xanthoma,0,1,0,1
+Cutaneous metastasis,1,0,0,1
+"Contact dermatitis, NOS",1,0,0,1
+Contact dermatitis caused by Rhus diversiloba,0,1,0,1
+Condyloma acuminatum,1,0,0,1
+Chicken pox exanthem,1,0,0,1
+Cheilitis,0,1,0,1
+Burn of forearm,1,0,0,1
+On examination - follicular pustules,1,0,0,1
+Blister,1,0,0,1
+Berloque dermatitis,1,0,0,1
+B-Cell Cutaneous Lymphoma,1,0,0,1
+Arsenical keratosis,0,1,0,1
+Allergic contact dermatitis caused by allergenic hapten derived from plant,1,0,0,1
+Agminate folliculitis,1,0,0,1
+Adnexal neoplasm,0,1,0,1
+Acute-on-chronic dyshidrotic eczema of hands,0,1,0,1
+Acute vesicular dermatitis,1,0,0,1
+Acute dermatitis,1,0,0,1
+Actinic granuloma,1,0,0,1
+Acne urticata,1,0,0,1
+Acne keloidalis,1,0,0,1
+Erythema migrans,0,1,0,1
+Foreign body reaction of the skin,1,0,0,1
+Fox-Fordyce disease,1,0,0,1
+Fungal dermatitis,0,1,0,1
+O/E - vesicles present,0,1,0,1
+Necrobiosis lipoidica,0,1,0,1
+Nail dystrophy,1,0,0,1
+Morbilliform eruption,1,0,0,1
+Melanoma,1,0,0,1
+Melanin pigmentation due to exogenous substance,0,0,1,1
+Majocchi granuloma,0,1,0,1
+Lymphangioma,1,0,0,1
+Localized skin infection,1,0,0,1
+Localised cutaneous vasculitis,1,0,0,1
+Local infection of wound,0,1,0,1
+Lichenified eczema,0,1,0,1
+Lichen sclerosus,0,1,0,1
+Leukonychia,1,0,0,1
+Knuckle pads,0,1,0,1
+Abrasion and/or friction burn of thigh without infection,1,0,0,1
+Keratoderma,1,0,0,1
+Jessner lymphocytic infiltrate,0,0,1,1
+Inflammatory dermatosis,1,0,0,1
+Infection of skin,1,0,0,1
+Ichthyosis,1,0,0,1
+Hyperpigmentation,0,1,0,1
+Histiocytosis of skin,1,0,0,1
+Hemosiderin pigmentation of skin due to venous insufficiency,0,1,0,1
+Hemosiderin pigmentation of lower limb due to varicose veins of lower limb,0,1,0,1
+HK - Hyperkeratosis,1,0,0,1
+Fungal dermatosis,0,1,0,1
+wound/abrasion,1,0,0,1
