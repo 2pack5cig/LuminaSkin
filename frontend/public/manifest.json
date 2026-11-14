@@ -2,7 +2,7 @@
   "name": "LuminaSkin",
   "short_name": "LuminaSkin",
   "description": "AI skin triage tuned for Indian and darker skin tones",
-  "start_url": "/",
+  "start_url": "/scan",
   "display": "standalone",
   "background_color": "#f7f5f2",
   "theme_color": "#0f766e",
