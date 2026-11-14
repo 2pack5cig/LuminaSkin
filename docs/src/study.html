@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>LuminaSkin: Study Guide</title><link rel="stylesheet" href="style.css"></head>
+<body>
+
+<section class="cover">
+  <p class="eyebrow">Study guide · for the LuminaSkin team</p>
+  <h1>Everything you need to <em>explain LuminaSkin.</em></h1>
+  <p class="lede">Each idea is explained the way you'd explain it to a friend: what it is, an everyday comparison, why we used it,
+  and the honest catch. Read it once fully; then use the "Say it in one line" boxes and the judge questions at the end before you present.</p>
+</section>
+
+<h2>Part A · The medical side</h2>
+
+<h3>A1. Why skin AI fails on brown and dark skin</h3>
+<p>AI learns from examples. Most public skin photos come from Europe, the US and Australia, so most show light skin. On light skin,
+inflammation looks <b>pink or red</b>. On brown skin the same inflammation often looks <b>purple, dark brown or grey</b>, and healing
+often leaves <b>darker or lighter marks</b>. A model that learned "rash = red" simply doesn't recognise these.</p>
+<p><i>Comparison:</i> if you only ever saw photos of red apples, you might not recognise a green apple as an apple.</p>
+<div class="note"><b>Say it in one line:</b> "We trained and tested on Indian skin specifically, and we report dark-skin results separately."</div>
+
+<h3>A2. Skin-tone scales</h3>
+<ul>
+  <li><b>Fitzpatrick (I–VI):</b> types by how skin reacts to sun. I always burns, VI never burns and is darkest. Most Indian skin is III–V.</li>
+  <li><b>Monk Skin Tone (1–10):</b> a 10-shade colour scale made by Google, designed to be more inclusive of darker tones.</li>
+</ul>
+
+<h3>A3. Triage vs diagnosis</h3>
+<p><b>Diagnosis</b> = a doctor deciding exactly what it is. <b>Triage</b> = deciding <i>how urgently</i> someone needs care and pointing
+them the right way. LuminaSkin does triage: likely possibilities, urgent warnings, what not to do, and when to see a doctor.</p>
+<p><i>Comparison:</i> a hospital reception nurse sorting patients by urgency, not the surgeon.</p>
+
+<h3>A4. Steroid misuse and "tinea incognito"</h3>
+<p>Steroid creams calm inflammation and itch. That's useful for eczema, but on a <b>fungal infection (ringworm)</b> steroids weaken the
+skin's local defence, so the fungus <b>spreads</b>, and the rash changes its look so it's hard to recognise ("incognito" = in disguise).
+Cheap "combination" creams (steroid + antifungal + antibiotic) are sold over the counter in India. In one rural North India study,
+80% of tinea patients had steroid-modified tinea. That's why LuminaSkin shows a "medicines to avoid" notice and asks
+"have you used a steroid cream?".</p>
+<div class="warn"><b>Careful wording:</b> doctors <i>do</i> prescribe steroid creams for eczema and psoriasis. Our message is "not without a doctor's prescription", not "never".</div>
+
+<h3>A5. The red flags (and why each is urgent)</h3>
+<table>
+  <tr><th>Sign</th><th>Why it matters</th></tr>
+  <tr><td>Trouble breathing, lips/tongue swelling</td><td>Possible severe allergic reaction (anaphylaxis): an emergency</td></tr>
+  <tr><td>New medicine + fever, mouth sores or blisters</td><td>Possible severe drug reaction (e.g. Stevens-Johnson syndrome)</td></tr>
+  <tr><td>Rash near the eye or on the tip of the nose</td><td>Shingles there can affect the eye; antivirals work best within 72 hours</td></tr>
+  <tr><td>Fast-spreading hot, red, painful skin</td><td>Possible cellulitis (skin infection that spreads)</td></tr>
+  <tr><td>Numb patch</td><td>Main early sign of leprosy, fully curable and treated free in India</td></tr>
+</table>
+<p>These are <b>fixed rules, not AI</b>, so they work even when the AI is wrong or the photo is bad.</p>
+
+<h3>A6. Scabies: why photos aren't enough</h3>
+<p>Scabies mites and burrows are tiny, so photos often miss them. Doctors use the <b>story</b>: itching (often worse at night), other
+people at home itching too, and spots between fingers or on wrists. LuminaSkin's scabies screen uses these clues (international
+scabies criteria use itch + close contacts). If you live alone, both typical signs are needed instead.</p>
+
+<h3>A7. Moles and the ABCDE rule</h3>
+<p>Doctors look for warning signs in a mole: <b>A</b>symmetry, <b>B</b>order uneven, <b>C</b>olours (several), <b>D</b>iameter over 6 mm,
+<b>E</b>volution (changing). <b>E is the strongest sign</b>, which is why our Spot tracker measures change over time. In darker skin,
+the most common melanoma type appears on <b>palms, soles and under nails</b>, so any new or changing dark spot there is always flagged.</p>
+
+<h2 class="pb">Part B · Data and fair testing</h2>
+
+<h3>B1. Our datasets</h3>
+<ul>
+  <li><b>SCIN (Google):</b> phone photos + patients' own symptom answers, labelled by up to 3 dermatologists. Gives us the symptom data.</li>
+  <li><b>DermaCon-IN (IIT Hyderabad):</b> clinic photos of South Indian patients, skin types III–VI, including children. Gave us 3,352 photos for our conditions, plus scabies and vitiligo.</li>
+</ul>
+
+<h3>B2. Train / validation / test</h3>
+<p><b>Training</b> photos teach the model. <b>Validation</b> photos are used to choose settings (like a practice exam). <b>Test</b> photos
+are locked away and used <b>once</b> at the end (the real exam). If you keep checking the test set and tweaking, you're memorising the
+exam, and the score stops meaning anything.</p>
+
+<h3>B3. Data leakage</h3>
+<p>One patient may have 3 photos of the same rash. If one photo is in training and another in testing, the model can "recognise" the
+patient rather than the disease, and the score looks falsely high. So we <b>split by patient</b>: all of a patient's photos go to the same part.</p>
+<p><i>Comparison:</i> giving students the exact exam question in homework, then praising their exam score.</p>
+
+<h3>B4. Class imbalance</h3>
+<p>Some conditions have many photos (tinea ~1,000), others few (pityriasis rosea ~60). A lazy model could always guess the common
+ones and look "accurate". We give rare conditions more weight during training and report <b>macro recall</b> (below), which exposes laziness.</p>
+
+<h2>Part C · The AI, explained simply</h2>
+
+<h3>C1. Foundation model and embeddings (Derm Foundation)</h3>
+<p>Google trained a large model on a huge number of skin images. We don't retrain it. We give it a photo and it returns
+<b>6,144 numbers</b>, an <b>embedding</b>, which is a compact description of what the skin looks like (colour patterns, texture, shapes).
+Photos of similar rashes get similar numbers.</p>
+<p><i>Comparison:</i> an experienced dermatologist describing a photo in a very detailed checklist. We then only need to learn which
+checklist patterns mean which disease, and that needs far fewer examples. This is called <b>transfer learning</b>.</p>
+
+<h3>C2. Logistic regression (the head on top)</h3>
+<p>A simple model that learns how much each of the 6,144 numbers points towards each disease, then turns the total into probabilities
+that add up to 100%. Simple, fast, hard to overfit, and it does most of the work in LuminaSkin.</p>
+
+<h3>C3. EfficientNet-B0 (a small image model)</h3>
+<p>A compact <b>convolutional neural network</b>: it slides small "pattern detectors" over the photo, starting with edges and colours, then
+textures, then shapes. Pretrained on everyday images, then fine-tuned on our skin photos. It gives a second opinion and powers the heatmap.</p>
+
+<h3>C4. Gradient-boosted trees (the symptom model)</h3>
+<p>Many small decision trees ("itchy? → yes → on groin? → …"), each correcting the mistakes of the previous ones. Good with yes/no answers,
+and it copes when questions are skipped.</p>
+
+<h3>C5. Late fusion (combining the three)</h3>
+<p>Each model gives its own probabilities; a final step learns <b>how much to trust each one</b> and combines them. If the user skips the
+questions, a separate set of weights is used for photo-only mode. Combining helped: macro recall 60.7% (photo only) → 63.9% (with answers).</p>
+<p><i>Comparison:</i> asking three experts and weighting the one who's usually right more heavily.</p>
+
+<h3>C6. Grad-CAM++ heatmap</h3>
+<p>It traces back which parts of the photo pushed EfficientNet towards its answer, and colours them. Red = most influence. It shows
+<b>where</b> the model looked, not <b>why</b>, and it comes from EfficientNet only.</p>
+
+<h3>C7. Confidence and "Not confident"</h3>
+<p>A model can be 90% sure or 35% sure. Below a threshold (chosen on validation data), LuminaSkin says "Not confident, see a doctor"
+and hides its guesses. The trade-off: a stricter threshold means fewer but more reliable answers. Ours gives a confident answer ~82% of the
+time, and those are right (top-1) ~74% of the time.</p>
+
+<h3>C8. "Not skin / unusual photo" check</h3>
+<p>The AI only knows 15 conditions, so it must refuse things it was never meant to see. We compare the photo's embedding with the
+<b>10 most similar real rash photos</b> from training. Too far → refused ("not a rash we can assess"); somewhat far → analysed but marked
+not confident. On 67 negative photos this cut confident wrong answers from 32 to 15.</p>
+<p><i>Comparison:</i> "Does this look like anything in my reference album? If not, I won't guess."</p>
+
+<h3>C9. Photo quality check</h3>
+<ul>
+  <li><b>Blur:</b> sharp photos have strong, sudden brightness changes at edges (measured with the "Laplacian"). Blurry ones don't. We measure at a fixed small size so low-resolution or smooth skin isn't wrongly called blurry.</li>
+  <li><b>Too dark:</b> average brightness, set low enough that dark skin isn't mistaken for a dark photo.</li>
+  <li><b>Glare:</b> only blown-out pure-white pixels count, so pale skin and vitiligo patches aren't mistaken for glare. It's a warning, not a block.</li>
+</ul>
+
+<h2 class="pb">Part D · Reading the numbers</h2>
+<table>
+  <tr><th>Metric</th><th>Plain meaning</th><th>Our result</th></tr>
+  <tr><td>Top-1 accuracy</td><td>The AI's #1 answer is right</td><td>66.7% overall</td></tr>
+  <tr><td>Top-3 accuracy</td><td>The right answer is among the 3 shown (what matters for triage)</td><td>89.1% overall, 90.8% Indian</td></tr>
+  <tr><td>Recall (sensitivity)</td><td>Of people who really have X, how many we caught</td><td>per condition</td></tr>
+  <tr><td>Macro recall</td><td>Recall averaged over all conditions equally, so rare ones count as much as common ones</td><td>63.9% overall</td></tr>
+  <tr><td>Specificity</td><td>Of people who don't have X, how many we correctly cleared</td><td>-</td></tr>
+  <tr><td>Ablation</td><td>Remove one part and see how much worse it gets, to prove each part helps</td><td>photo-only vs + symptoms</td></tr>
+</table>
+<p><b>Why top-1 looks "low":</b> 15 conditions, many look alike, and dermatologists themselves disagree on photos. Random guessing would get
+top-1 ≈ 7% and top-3 ≈ 20%.</p>
+<p><b>Before vs after Indian data:</b> on the same Indian test patients, top-3 went from 69.4% to 90.6%, and on Fitzpatrick V–VI from 71.2% to 94.2%.
+This is the strongest evidence for the project's purpose.</p>
+
+<h2>Part E · Safety and product decisions</h2>
+<ul>
+  <li><b>Follow-up questions never change the AI's ranking.</b> They only add hints ("your answers fit Impetigo") and "could also be" cards. This avoids confident wrong answers from untested rules.</li>
+  <li><b>Experiments we didn't ship:</b> adding 277 web images (Fitzpatrick17k) didn't beat the baseline on held-out data, so we kept the simpler model. Measuring instead of assuming.</li>
+  <li><b>Privacy:</b> photos aren't stored on the server; scan history and tracked spots stay on the phone; no login needed.</li>
+  <li><b>Calm design:</b> emergencies are bold red; cautions are a softer tone, so users aren't frightened by everything.</li>
+</ul>
+
+<h2>Part F · The Spot tracker</h2>
+<h3>F1. Measuring with a coin</h3>
+<p>A photo has pixels, not millimetres. A coin of known size gives the conversion: if a 25 mm coin is 500 pixels wide, each pixel is 0.05 mm.
+The app finds the coin (it detects circles), and the user taps the spot. <b>Coin sizes changed between series</b> (old ₹1 = 25 mm, new ₹1 = 20 mm),
+so the user picks coin + series or types the diameter.</p>
+<h3>F2. Outlining the spot</h3>
+<p>The app models the surrounding skin colour across the photo (so uneven lighting and shadows don't count as the spot), then keeps the
+area at least half as distinct as the spot's centre. Multi-coloured moles stay whole. Accuracy: within ~0.2–0.3 mm on test images, about 1 mm in real photos.</p>
+<h3>F3. Change and the concern bar</h3>
+<p>Each recheck compares size (in mm), colours and outline with last time. The <b>concern bar</b> (0–100) adds up transparent warning signs,
+weighting <b>change</b> most: Low = keep watching, Medium = get it checked, High = see a doctor within 2 weeks. Small changes under ~0.5 mm are
+treated as measurement noise. A "same spot?" check compares how similar the two photos look (calibrated: 5% false alarms).</p>
+<div class="warn"><b>Never say:</b> "it detects cancer" or "it's safe". Say: "It measures change and flags warning signs so people get checked earlier."</div>
+
+<h2 class="pb">Part G · Likely judge questions (with answers)</h2>
+<p class="q">Is this a diagnosis?</p><p class="a">No, it's triage: likely possibilities, urgent warnings and when to see a doctor. It hasn't been clinically validated.</p>
+<p class="q">How do you know it works on dark skin?</p><p class="a">We added Indian clinic data and tested on held-out Indian patients: 90.8% top-3, and 94.2% on Fitzpatrick V–VI, up from 71.2% before. Top-3 is the same on dark and light skin (89.1% vs 89.4%). The caveat: only 8 Fitzpatrick VI test cases.</p>
+<p class="q">Why not just use ChatGPT on the photo?</p><p class="a">General chat models aren't tested on dark skin, can confidently make things up, and give no measurable accuracy. Ours is measured on held-out data and has fixed safety rules.</p>
+<p class="q">What if the AI is wrong?</p><p class="a">Several layers: photo checks, a not-skin check, a "not confident" result that hides guesses, red-flag rules independent of the AI, and always "see a doctor" guidance.</p>
+<p class="q">Why only 15 conditions?</p><p class="a">Those have enough reliable data, especially on Indian skin. Others are handled by follow-up questions with "could also be" cards and "see a doctor".</p>
+<p class="q">Can it detect skin cancer?</p><p class="a">No. The Spot tracker measures moles over time and flags warning signs (growth, new colours, uneven outline), the way doctors use the ABCDE rule, so people get checked sooner.</p>
+<p class="q">What happens to my photos?</p><p class="a">They're analysed on our server and not stored; history stays on the phone.</p>
+<p class="q">What's the hardest technical problem you solved?</p><p class="a">Fairness in the details: the photo-quality check was rejecting good dark-skin and vitiligo photos, and measuring moles in uneven light. We tuned both on real Indian photos.</p>
+<p class="q">What would you do next?</p><p class="a">A clinical study with Indian dermatologists, more Fitzpatrick VI data, an "other condition" category, Hindi and regional languages, and an offline phone version.</p>
+
+<h2>Glossary</h2>
+<table>
+  <tr><td><b>Embedding</b></td><td>A list of numbers describing an image; similar images get similar numbers</td></tr>
+  <tr><td><b>Transfer learning</b></td><td>Reusing a model trained on a big task for a smaller one</td></tr>
+  <tr><td><b>Overfitting</b></td><td>Memorising training photos instead of learning the disease; looks great in training, fails on new photos</td></tr>
+  <tr><td><b>Ensemble / late fusion</b></td><td>Combining several models' answers</td></tr>
+  <tr><td><b>Calibration</b></td><td>When the model says 70%, it's right about 70% of the time</td></tr>
+  <tr><td><b>Out-of-distribution</b></td><td>An input unlike anything in training (a mug, a tattoo)</td></tr>
+  <tr><td><b>Grad-CAM++</b></td><td>Heatmap of which image areas influenced the answer</td></tr>
+  <tr><td><b>Fitzpatrick / Monk</b></td><td>Skin-tone scales (6 types / 10 shades)</td></tr>
+  <tr><td><b>Tinea incognito</b></td><td>Ringworm disguised and worsened by steroid cream</td></tr>
+  <tr><td><b>ABCDE</b></td><td>Mole warning signs: Asymmetry, Border, Colour, Diameter, Evolution</td></tr>
+</table>
+<p class="small">LuminaSkin is a triage aid, not a diagnosis. It has not been clinically validated. Always consult a qualified doctor.</p>
+</body></html>

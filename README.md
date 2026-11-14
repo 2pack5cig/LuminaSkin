@@ -11,6 +11,8 @@ Take up to 3 photos of a rash (close-up, angle, distance), tap a few yes/no ques
 - **follow-up questions** chosen from the AI's top 3 that add hints and **"could also be"** cards (chickenpox, heat rash, drug reaction, leprosy…) without changing the AI's ranking
 - a **scabies screen** from clinical criteria, a **leprosy (numb patch)** check, and steroid / child / pregnancy cards
 - condition info, **Soothing Care** tips, a private **scan history** on the phone, and a detailed **doctor PDF**
+- a **Spot tracker**: measure a mole or rash patch with a coin for scale (mm, area, colours, outline) and recheck it over
+  time; growth, new colours or a more uneven outline are flagged (a measurement aid, not a skin-cancer test)
 
 > ⚠️ **LuminaSkin is a triage aid, not a diagnosis.** It has not been clinically validated. Always consult a qualified doctor.
 
@@ -28,6 +30,8 @@ Phone (Next.js PWA) ──/api──► FastAPI on the laptop
   5. symptom model (gradient-boosted trees on SCIN's yes/no questions)
   6. late fusion: weighted log-linear pool (works with or without symptoms) → "not confident" threshold
   7. fixed rules: red flags, self-medication warning, scabies screen, alerts → follow-up questions → hints
+Spot tracker (/spots): coin detection (Hough circles) → lighting-corrected spot outline from the tapped point
+  → size / area / colours / outline → compare with the previous check (+ Derm Foundation "same spot?" similarity)
 ```
 
 ## Results (v3, held-out test, split by patient, evaluated once)
@@ -71,7 +75,8 @@ Open `http://<laptop-ip>:3000` (landing page) or `/scan` on a phone on the same 
 ## Repository
 ```
 frontend/   Next.js + Tailwind web app (landing page, scan flow, results, history, doctor PDF)
-backend/    FastAPI: quality + OOD gates, models, Grad-CAM, red flags, medicine warning, follow-ups, disease info (kb/)
+backend/    FastAPI: quality + OOD gates, models, Grad-CAM, red flags, medicine warning, follow-ups, spot tracker, disease info (kb/)
+docs/       sources for the project summary + study guide (PDFs are generated locally, not committed)
 ml/         data preparation, training and evaluation scripts; live model in ml/models_v3_final/
 ```
 

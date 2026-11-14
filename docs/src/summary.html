@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>LuminaSkin: Project Summary</title><link rel="stylesheet" href="style.css"></head>
+<body>
+
+<section class="cover">
+  <p class="eyebrow">Project summary · LuminaSkin · November 2026</p>
+  <h1>A careful first look at a rash, <em>built for Indian and darker skin.</em></h1>
+  <p class="lede">LuminaSkin is a phone web app that looks at photos of a skin problem, asks a few yes/no questions, and gives a
+  triage result: the three most likely conditions, a heatmap of where the AI looked, safety warnings that don't depend on the AI,
+  and a report for a doctor. It also tracks a mole or patch over time. It is a <b>triage aid, not a diagnosis</b>.</p>
+  <div class="grid3" style="margin-top:14pt">
+    <div class="card stat"><b>15</b><span>skin conditions recognised by the AI</span></div>
+    <div class="card stat"><b>90.8%</b><span>top-3 correct on held-out Indian patients</span></div>
+    <div class="card stat"><b>89.1%</b><span>top-3 correct on Fitzpatrick IV–VI (brown/dark) skin, same as lighter skin</span></div>
+  </div>
+</section>
+
+<h2>1. The problem</h2>
+<ul>
+  <li><b>Skin AI is mostly trained on light skin.</b> On brown and dark skin, redness looks purple, brown or grey, so models (and textbooks) miss it. Published models lost 27–36% of their performance on a balanced dark-skin test set (DDI, Stanford).</li>
+  <li><b>Few dermatologists, especially outside cities.</b> People self-treat with medicines from a nearby shop.</li>
+  <li><b>Steroid misuse.</b> Cheap steroid "combination" creams (e.g. Betnovate-N, Panderm, Quadriderm) are bought for any itch. On ringworm they hide and spread the infection ("tinea incognito"). In one rural North India study, 80% of tinea patients had steroid-modified tinea.</li>
+  <li><b>Serious conditions get missed:</b> leprosy (numb patch), shingles near the eye, severe drug reactions, scabies spreading in families.</li>
+</ul>
+
+<h2>2. What a user sees</h2>
+<div class="flow">1  Photos     close-up (required) + angle + distance, each cropped to a square
+2  Questions  yes/no taps: duration, itch/pain, appearance, body site, fever... + a safety check
+3  AI result  top-3 conditions, or "Not confident, see a doctor", with a heatmap
+4  Follow-up  2-4 questions picked from the top 3 to tell look-alikes apart (adds hints only)
+5  Result     condition info, Soothing Care, warnings, "medicines to avoid", doctor PDF, save
+   Spots      separate tracker: measure a mole/patch with a coin and recheck it over time</div>
+
+<h2>3. How it works</h2>
+<div class="flow">Phone (Next.js web app)  --/api-->  FastAPI server on the laptop (photos not stored)
+  1. Photo quality gate     blur measured at a fixed size, darkness; glare = warning only
+  2. "Not skin / unusual"   distance to the nearest real rash photos (Derm Foundation space)
+  3. Derm Foundation        Google's skin model: photo -> 6,144 numbers -> logistic regression
+  4. EfficientNet-B0        small image model on the pixels -> second opinion + Grad-CAM++ heatmap
+  5. Symptom model          gradient-boosted trees on the yes/no answers
+  6. Late fusion            learned weights combine 3-5 (works with or without answers)
+  7. Confidence threshold   below it: "Not confident, see a doctor" (guesses hidden)
+  8. Fixed rules            red flags, medicine warning, scabies screen, leprosy/steroid/child/pregnancy cards
+  9. Follow-up questions    chosen from the top 3 -> hints + "could also be" cards (never change the ranking)</div>
+
+<h3>The 15 conditions</h3>
+<p>Acne · Contact dermatitis · Eczema · Folliculitis · Herpes simplex · Herpes zoster (shingles) · Impetigo · Insect bite ·
+Pityriasis rosea · Psoriasis · Scabies · Tinea (ringworm) · Tinea versicolor · Urticaria (hives) · Vitiligo.
+Eczema + contact dermatitis are shown together as the "eczema family" when both are in the top 3.</p>
+<p><b>Flagged by follow-up questions only</b> (not diagnosed by the AI): chickenpox, heat rash, drug reaction, leprosy, seborrheic
+dermatitis, pityriasis alba, hand-foot-mouth disease, keratosis pilaris, seborrheic keratosis.</p>
+
+<h2>4. Data</h2>
+<table>
+  <tr><th>Dataset</th><th>What it is</th><th>How we used it</th></tr>
+  <tr><td><b>SCIN</b> (Google)</td><td>Phone photos with patient-reported symptoms, labelled by up to 3 dermatologists</td><td>Training + symptom model; its original test cases kept for a fair before/after comparison</td></tr>
+  <tr><td><b>DermaCon-IN</b> (IIT Hyderabad, 2025)</td><td>5,450 clinic photos of ~3,000 South Indian patients, Fitzpatrick III–VI, incl. children</td><td>3,352 photos / 1,950 patients mapped to our 15 conditions; added scabies (259) and vitiligo (601)</td></tr>
+  <tr><td>Fitzpatrick17k</td><td>Medical-website photos with skin-type labels</td><td>Experiment: 277 dark-skin photos did not beat the baseline, so not shipped</td></tr>
+  <tr><td>Negatives (67)</td><td>Objects, food, look-alikes, other skin conditions, bad photos</td><td>Testing the "not skin" check</td></tr>
+</table>
+<table>
+  <tr><th>Split (v3)</th><th>Photos</th><th>Patients</th><th>Used for</th></tr>
+  <tr><td>Training</td><td>4,424</td><td>2,360</td><td>Teaching the models (half are Fitzpatrick IV–VI)</td></tr>
+  <tr><td>Validation</td><td>971</td><td>523</td><td>Choosing settings and thresholds</td></tr>
+  <tr><td>Test</td><td>1,144</td><td>598</td><td>Final scores, measured once</td></tr>
+</table>
+<p class="small">Split by patient, so no patient appears in two parts (prevents "data leakage"). The shipped model was then retrained on all 6,539 photos; reported scores come from the held-out test above.</p>
+
+<h2 class="pb">5. Results</h2>
+<table>
+  <tr><th>Held-out test (612 cases)</th><th>Top-3</th><th>Top-1</th><th>Macro recall</th></tr>
+  <tr><td><b>All</b></td><td><b>89.1%</b></td><td>66.7%</td><td>63.9%</td></tr>
+  <tr><td>Indian patients (DermaCon-IN)</td><td><b>90.8%</b></td><td>75.4%</td><td>53.7%</td></tr>
+  <tr><td>Fitzpatrick IV–VI</td><td><b>89.1%</b></td><td>70.0%</td><td>51.1%</td></tr>
+  <tr><td>Fitzpatrick I–III</td><td>89.4%</td><td>63.8%</td><td>70.6%</td></tr>
+</table>
+<table>
+  <tr><th>Before vs after adding Indian data (same 235 Indian test cases)</th><th>Old (SCIN only)</th><th>New (v3)</th></tr>
+  <tr><td>Top-3 correct</td><td>69.4%</td><td><b>90.6%</b></td></tr>
+  <tr><td>Top-1 correct</td><td>34.0%</td><td><b>72.3%</b></td></tr>
+  <tr><td>Top-3, Fitzpatrick V–VI</td><td>71.2%</td><td><b>94.2%</b></td></tr>
+</table>
+<ul>
+  <li><b>Symptoms help:</b> macro recall 60.7% (photo only) → 63.9% (photo + answers).</li>
+  <li><b>Three photos help:</b> on cases with 2+ photos, top-3 rose from 82.8% (one photo) to 89.2% (earlier model).</li>
+  <li><b>"Not confident" behaviour:</b> the app gives a confident answer for ~82% of cases; those are right (top-1) ~74% of the time.</li>
+  <li><b>Not-skin check:</b> on 67 negative photos, wrong confident answers fell from 32 to 15 after switching to a nearest-neighbour check (non-skin: 13/23 → 2–3/23). The same photos were used to choose the method, so this is optimistic.</li>
+</ul>
+
+<h2>6. Safety design</h2>
+<table>
+  <tr><th>Feature</th><th>What it does</th></tr>
+  <tr><td>Red flags (fixed rules)</td><td>Emergency: trouble breathing, lip/tongue swelling, new medicine + fever/mouth sores/blisters. Urgent: near the eye or tip of the nose, fast-spreading hot redness, mouth sores, fever + spreading rash. Run on every scan, even if the photo is rejected.</td></tr>
+  <tr><td>Medicines to avoid</td><td>Steroid/combination creams, antibiotic tablets/injections (e.g. penicillin), steroid tablets: "not without a doctor's prescription", with a condition-specific reason.</td></tr>
+  <tr><td>Not confident</td><td>"No reliable result" box with next steps; AI guesses hidden behind a toggle and labelled low-confidence.</td></tr>
+  <tr><td>Alerts</td><td>Numb patch → leprosy check (free treatment in India); steroid cream used; child; pregnancy; shingles within 72 h.</td></tr>
+  <tr><td>Scabies screen</td><td>Itch + others at home itchy + night itch / finger-wrist spots (or both signs if living alone).</td></tr>
+  <tr><td>Fair photo checks</td><td>Blur and darkness thresholds tuned on dermatologist-approved Indian photos so dark skin and vitiligo aren't rejected.</td></tr>
+  <tr><td>Privacy</td><td>Photos not stored on the server; history and tracked spots stay on the phone.</td></tr>
+</table>
+
+<h2>7. Spot tracker</h2>
+<p>Place a coin next to a mole or patch, tap the spot, and the app measures <b>size (mm), area, number of colours and outline
+evenness</b>, then compares with the last check. Coin sizes differ between series (old ₹1 = 25 mm, new ₹1 = 20 mm), so the user picks
+coin + series or types the diameter. Spots are flagged if they <b>grow</b> (≥1 mm or ≥20%), gain <b>new colours</b>, get a <b>more uneven
+outline</b>, pass <b>6 mm</b>, or are changing on a <b>palm, sole or nail</b>. Rashes show smaller / same / bigger. Accuracy on test images:
+within ~0.2–0.3 mm across skin tones; on real photos, about 1 mm. A "same spot?" check (calibrated on real photo pairs: 5% false alarms)
+warns if the photos look too different. Recheck reminders can be added to the phone calendar.</p>
+<p><b>Concern bar (moles):</b> a transparent 0–100 "get it checked" score from warning signs: size over 6 mm, 3+ colours, uneven or
+asymmetric outline, palm/sole/nail, and, weighted most, <b>change since the last check</b> (growth in mm, new colours, more uneven).
+Low (0–29) keep watching · Medium (30–59) get it checked · High (60+) see a doctor within 2 weeks. Each reason is listed. It is not a
+cancer probability.</p>
+
+<h2>8. Honest limitations</h2>
+<ul>
+  <li>Not clinically validated; labels are dermatologists' opinions from photos, not biopsies.</li>
+  <li>Only 8 Fitzpatrick VI test cases, so results for the darkest skin are uncertain. On the older US-collected SCIN dark-skin cases, v3 is slightly lower than the old model (top-3 82.9% vs 85.7%, 70 cases).</li>
+  <li>Other skin conditions (melasma, moles, warts…) can still get a confident wrong answer; an "other condition" category is future work.</li>
+  <li>Follow-up hints use standard clinical clues but are not validated in this app.</li>
+  <li>The Spot tracker is a measurement aid, not a skin-cancer test.</li>
+  <li>Currently runs on a laptop server; phones need the laptop to be on.</li>
+</ul>
+
+<h2>9. Future work</h2>
+<ul>
+  <li>Clinical validation with Indian dermatologists; DDI (biopsy-proven, all skin tones) as an external test.</li>
+  <li>An "other condition" category; more Fitzpatrick VI data; Hindi and regional languages.</li>
+  <li>Hosted server, and an offline on-phone "Lite" mode for low-connectivity areas.</li>
+  <li>Spot tracker: skin-lesion risk check trained on smartphone data (PAD-UFES-20), reported honestly.</li>
+</ul>
+
+<h2>10. Tech stack &amp; credits</h2>
+<p>Next.js + Tailwind (installable web app), FastAPI (Python), TensorFlow (Derm Foundation), PyTorch + timm (EfficientNet-B0), scikit-learn,
+OpenCV, Grad-CAM++, jsPDF, IndexedDB, ngrok. Data: SCIN © Google; DermaCon-IN © Madarkar et al., IIT Hyderabad (CC BY-NC-SA 4.0);
+Fitzpatrick17k © Groh et al. (CC BY-NC-SA 3.0); Derm Foundation by Google Health AI Developer Foundations.
+Code: github.com/2pack5cig/LuminaSkin.</p>
+<p class="small">LuminaSkin is a triage aid, not a diagnosis. It has not been clinically validated. Always consult a qualified doctor.</p>
+</body></html>

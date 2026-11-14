@@ -21,15 +21,18 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en">
       <body className={`${fraunces.variable} ${hanken.variable} ${jetbrains.variable} antialiased min-h-dvh flex flex-col`}>
         <header className="sticky top-0 z-10 border-b border-rule bg-background/95 backdrop-blur">
-          <nav className="wrap flex min-h-[64px] items-center justify-between gap-6">
+          <nav className="wrap flex min-h-[64px] items-center justify-between gap-3 sm:gap-6">
             <a href="/" aria-label="LuminaSkin, home" className="font-serif text-[1.45rem] font-semibold leading-none tracking-[-0.02em]">
               Lumina<i className="font-normal">Skin</i>
             </a>
-            <div className="flex items-center gap-5 sm:gap-8 text-[0.94rem] font-medium">
-              <Link href="/history" className="border-b border-transparent py-1 hover:border-foreground">My scans</Link>
-              <Link href="/scan" className="btn btn-ink btn-sm">
+            <div className="flex items-center gap-3 whitespace-nowrap text-[0.9rem] font-medium sm:gap-8 sm:text-[0.94rem]">
+              <Link href="/spots" className="border-b border-transparent py-1 hover:border-foreground">Spots</Link>
+              <Link href="/history" className="border-b border-transparent py-1 hover:border-foreground">
+                <span className="sm:hidden">Scans</span><span className="hidden sm:inline">My scans</span>
+              </Link>
+              <Link href="/scan" className="btn btn-ink btn-sm !px-3 sm:!px-4">
                 <span className="hidden sm:inline">Start a scan</span><span className="sm:hidden">Scan</span>
-                <span className="font-mono font-normal">→</span>
+                <span className="hidden font-mono font-normal sm:inline">→</span>
               </Link>
             </div>
           </nav>

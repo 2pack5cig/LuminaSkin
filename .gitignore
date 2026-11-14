@@ -46,3 +46,6 @@ ml/data/negatives/*
 !ml/data/negatives/sources.csv
 !ml/data/negatives/results_v3.csv
 !ml/data/dermacon_map.json
+
+# generated PDFs stay local (not on GitHub)
+docs/*.pdf

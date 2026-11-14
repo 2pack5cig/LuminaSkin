@@ -1,6 +1,9 @@
 """Derm triage backend. Uses the real models when ml/models/ has them; otherwise demo (mock) results."""
 import json
 import logging
+
+import cv2
+import numpy as np
 from pathlib import Path
 
 from fastapi import FastAPI, File, Form, UploadFile
@@ -9,7 +12,7 @@ from fastapi.concurrency import run_in_threadpool
 
 from pydantic import BaseModel
 
-from . import followups, medicines, models, quality, redflags
+from . import followups, medicines, models, quality, redflags, spot
 
 ROOT = Path(__file__).resolve().parent.parent
 KB = json.loads((ROOT / "kb" / "clinical_kb.json").read_text())
@@ -156,3 +159,46 @@ def group_dermatitis(top3):
         "see_doctor_when": list(dict.fromkeys(ecz["see_doctor_when"] + cd["see_doctor_when"]))[:5],
     }
     return display, triage
+
+
+# ---------------------------------------------------------------- spot tracker
+@app.post("/spot/measure")
+async def spot_measure(image: UploadFile = File(...), tap_x: float = Form(...), tap_y: float = Form(...),
+                       coin: str = Form("2"), coin_edges: str = Form(""), kind: str = Form("spot"),
+                       location: str = Form("other"), prev: str = Form("")):
+    """Measure the tapped spot (coin for scale) and, if `prev` is given, compare with the previous check.
+    tap_x/tap_y and coin_edges are fractions of the image (0-1). Not a diagnosis."""
+    bgr = quality.decode(await image.read())
+    if bgr is None:
+        return {"ok": False, "reason": "unreadable"}
+    h, w = bgr.shape[:2]
+    tap = (tap_x * w, tap_y * h)
+    coin_px = None
+    if coin_edges:
+        x1, y1, x2, y2 = [float(v) for v in coin_edges.split(",")]
+        x1, x2, y1, y2 = x1 * w, x2 * w, y1 * h, y2 * h
+        coin_px = ((x1 + x2) / 2, (y1 + y2) / 2, float(np.hypot(x2 - x1, y2 - y1) / 2))
+    m = await run_in_threadpool(spot.measure, bgr, tap, spot.coin_mm(coin), coin_px)
+    if not m.get("ok"):
+        return m
+    emb_b64 = None
+    if PIPE:  # Derm Foundation embedding of the area around the spot, for "is this the same spot?" checks
+        xs = [p[0] * w for p in m["outline"]]; ys = [p[1] * h for p in m["outline"]]
+        pad = 0.6 * max(max(xs) - min(xs), max(ys) - min(ys), 40)
+        x0, x1 = int(max(0, min(xs) - pad)), int(min(w, max(xs) + pad))
+        y0, y1 = int(max(0, min(ys) - pad)), int(min(h, max(ys) + pad))
+        crop = cv2.cvtColor(bgr[y0:y1, x0:x1], cv2.COLOR_BGR2RGB)
+        emb = await run_in_threadpool(PIPE._derm_embedding, crop)
+        emb_b64 = spot.emb_to_b64(emb[0])
+    out = {"ok": True, "metrics": m, "overlay_jpg_b64": spot.overlay_png(bgr, m), "embedding": emb_b64, "comparison": None,
+           "concern": None}
+    p = json.loads(prev) if prev else {}
+    if kind == "spot":
+        out["concern"] = spot.concern(location, m, p.get("metrics"))
+    if prev:
+        sim = None
+        if emb_b64 and p.get("embedding"):
+            a, b = spot.emb_from_b64(emb_b64), spot.emb_from_b64(p["embedding"])
+            sim = round(float(a @ b / (np.linalg.norm(a) * np.linalg.norm(b))), 3)
+        out["comparison"] = spot.compare(kind, location, p.get("metrics", {}), m, sim)
+    return out

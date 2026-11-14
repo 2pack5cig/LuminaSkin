@@ -27,7 +27,7 @@ export const SHOT_INFO: Record<Shot, { title: string; how: string; required?: bo
 };
 const ORDER: Shot[] = ["close_up", "angle", "distance"];
 
-function CropView({ src, onDone, onCancel }: { src: string; onDone: (p: { blob: Blob; dataUrl: string }) => void; onCancel: () => void }) {
+export function CropView({ src, onDone, onCancel }: { src: string; onDone: (p: { blob: Blob; dataUrl: string }) => void; onCancel: () => void }) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [area, setArea] = useState<Area | null>(null);
@@ -54,7 +54,7 @@ function CropView({ src, onDone, onCancel }: { src: string; onDone: (p: { blob: 
   );
 }
 
-function PickButtons({ onPick }: { onPick: (src: string) => void }) {
+export function PickButtons({ onPick }: { onPick: (src: string) => void }) {
   const pick = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
     if (f) onPick(URL.createObjectURL(f));

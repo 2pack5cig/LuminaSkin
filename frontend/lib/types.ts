@@ -66,3 +66,24 @@ export type Scan = {
   answers: Answers;
   result: AnalyzeResult;
 };
+
+// ---------------------------------------------------------------- spot tracker
+export type SpotKind = "spot" | "rash";
+export type SpotMetrics = {
+  ok: boolean; reason?: string; coin_found: boolean; coin: number[] | null;
+  area_mm2: number | null; diameter_mm: number | null; eq_diameter_mm: number | null; area_pct_of_photo: number;
+  colours: number; irregularity: number; asymmetry: number; lightness_vs_skin: number; outline: number[][];
+};
+export type SpotComparison = {
+  verdict: "no_change" | "changed_see_doctor" | "check_same_spot" | "smaller" | "about_same" | "bigger" | "bigger_see_doctor";
+  changes: { what: string; before: string; now: string; delta: string }[];
+  alerts: string[]; similarity: number | null;
+};
+export type SpotConcern = { score: number; level: "low" | "medium" | "high"; reasons: string[]; note: string };
+export type SpotCheck = {
+  date: string; overlay: string; photo: string; metrics: SpotMetrics; embedding: string | null; comparison: SpotComparison | null;
+  concern?: SpotConcern | null;
+};
+export type Spot = {
+  id: string; name: string; kind: SpotKind; location: string; coin: string; created: string; nextDue: string; checks: SpotCheck[];
+};
