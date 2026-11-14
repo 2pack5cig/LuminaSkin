@@ -20,8 +20,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className={`${geist.variable} antialiased min-h-dvh`}>
         <header className="sticky top-0 z-10 bg-background/90 backdrop-blur border-b border-black/5">
           <nav className="mx-auto max-w-md px-4 h-14 flex items-center justify-between">
-            <Link href="/" className="font-semibold text-brand text-lg">LuminaSkin</Link>
-            <Link href="/history" className="text-sm text-black/60">My scans</Link>
+          <a href="/" className="font-semibold text-brand text-lg">LuminaSkin</a>
+          <div className="flex items-center gap-4 text-sm">
+            <Link href="/scan" className="font-medium text-brand">New scan</Link>
+            <Link href="/history" className="text-black/60">My scans</Link>
+          </div>
           </nav>
         </header>
         <main className="mx-auto max-w-md px-4 pb-16">{children}</main>
