@@ -63,3 +63,16 @@ class LogPool:
 
 def to_logp(p):
     return np.log(np.clip(p, 1e-6, 1.0))
+
+
+class AlignedProba:
+    """Wraps a classifier so predict_proba always returns columns for the full class list (in order),
+    even if some classes were missing from its training data (prob 0 + tiny smoothing)."""
+
+    def __init__(self, clf, n_classes: int):
+        self.clf, self.n = clf, n_classes
+
+    def predict_proba(self, X):
+        p = np.full((len(X), self.n), 1e-4)
+        p[:, self.clf.classes_] = self.clf.predict_proba(X)
+        return p / p.sum(1, keepdims=True)

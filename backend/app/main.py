@@ -7,7 +7,9 @@ from fastapi import FastAPI, File, Form, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.concurrency import run_in_threadpool
 
-from . import models, quality, redflags
+from pydantic import BaseModel
+
+from . import followups, medicines, models, quality, redflags
 
 ROOT = Path(__file__).resolve().parent.parent
 KB = json.loads((ROOT / "kb" / "clinical_kb.json").read_text())
@@ -77,7 +79,9 @@ async def analyze(images: list[UploadFile] = File(...), symptoms: str = Form("{}
         e = KB.get("Scabies", {})
         scab.update(summary=e.get("summary"), contagious=e.get("contagious"), steroid_warning=e.get("steroid_warning"),
                     soothing_care=e.get("soothing_care", []), see_doctor_when=e.get("see_doctor_when", []))
-    base = {"quality": q, "red_flags": flags, "scabies": scab, "disclaimer": DISCLAIMER, "mock": PIPE is None}
+    alerts = redflags.core_alerts(sym)  # leprosy / steroid / child / pregnancy cards, no AI needed
+    base = {"quality": q, "red_flags": flags, "scabies": scab, "alerts": alerts, "followups": [],
+            "disclaimer": DISCLAIMER, "mock": PIPE is None}
     if not q["ok"]:
         scab["prominent"] = True
         return {**base, "ood": {"rejected": False, "reason": None}, "top3": None, "uncertain": False,
@@ -101,7 +105,28 @@ async def analyze(images: list[UploadFile] = File(...), symptoms: str = Form("{}
         triage = None
     elif triage is None:
         triage = triage_text(display[0]["label"])
+    labels = [t["label"] for t in pred["top3"]]
+    if "Herpes Zoster" in labels and sym.get("condition_duration") in ("ONE_DAY", "LESS_THAN_ONE_WEEK"):
+        alerts.append({"kind": "zoster72", "level": "urgent", "title": "If this could be shingles, see a doctor within 72 hours",
+                       "text": "Antiviral tablets work best when started within 3 days of the rash appearing."})
+    if sym.get("steroid_cream") and set(labels) & {"Tinea", "Eczema", "Psoriasis", "Contact Dermatitis"}:
+        for a in alerts:
+            if a["kind"] == "steroid":
+                a["text"] += " Because steroid cream was used, the AI's result for these look-alike conditions is less reliable."
+    base["followups"] = followups.pick(labels, bool(sym.get("is_child")))
+    base["medicine_warning"] = medicines.warning(labels, sym)   # fixed rule, not AI
     return {**base, **pred, "display": display, "triage": triage}
+
+
+class HintRequest(BaseModel):
+    top_labels: list[str]
+    answers: dict[str, str]
+
+
+@app.post("/hints")
+def get_hints(req: HintRequest):
+    """Follow-up answers -> hints. Never changes the AI's ranking (it isn't even sent here)."""
+    return followups.hints(req.top_labels, req.answers, KB)
 
 
 DERM_FAMILY = ("Eczema", "Contact Dermatitis")

@@ -1,0 +1,68 @@
+file,group,source,license,link,note
+g1_mug_01.jpg,g1,Wikimedia Commons,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:Coffee_Mug_on_table_with_creamer.jpg,File:Coffee Mug on table with creamer.jpg
+g1_keyboard_01.jpg,g1,Wikimedia Commons,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:Laptop_keyboard_abstraction.jpg,File:Laptop keyboard abstraction.jpg
+g1_remote_01.jpg,g1,Wikimedia Commons,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:Television_remote_control_-_black_01.jpg,File:Television remote control - black 01.jpg
+g1_bottle_01.jpg,g1,Wikimedia Commons,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:Water_bottle_(13779).jpg,File:Water bottle (13779).jpg
+g1_building_01.jpg,g1,Wikimedia Commons,CC BY-SA 2.0,https://commons.wikimedia.org/wiki/File:Old_House_of_Keys_-_geograph.org.uk_-_1817310.jpg,File:Old House of Keys - geograph.org.uk - 1817310.jpg
+g1_wall_01.jpg,g1,Wikimedia Commons,CC BY-SA 3.0,https://commons.wikimedia.org/wiki/File:Texture_old_wall.jpg,File:Texture old wall.jpg
+g1_tiles_01.jpg,g1,Wikimedia Commons,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:002_2012_11_08_Do_it_yourself.jpg,File:002 2012 11 08 Do it yourself.jpg
+g1_table_01.jpg,g1,Wikimedia Commons,CC0,https://commons.wikimedia.org/wiki/File:Weatherworn_top_of_wooden_table.jpg,File:Weatherworn top of wooden table.jpg
+g1_bedsheet_01.jpg,g1,Wikimedia Commons,CC0,https://commons.wikimedia.org/wiki/File:Bed_curtain_border_MET_31.286_CP4.jpg,File:Bed curtain border MET 31.286 CP4.jpg
+g1_carpet_01.jpg,g1,Wikimedia Commons,CC0,https://commons.wikimedia.org/wiki/File:Carpet_texture.jpg,File:Carpet texture.jpg
+g1_fire_01.jpg,g1,Wikimedia Commons,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:Chapati_making_at_the_Chokhi_Dhani_Resort_Panchkula_08.jpg,File:Chapati making at the Chokhi Dhani Resort Panchkula 08.jpg
+g1_dal_01.jpg,g1,Wikimedia Commons,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:Traditional_Indian_meal.jpg,File:Traditional Indian meal.jpg
+g3_dcn_melasma_01.jpg,g3,"DermaCon-IN (other diagnosis, not used in training)",CC BY-NC-SA 4.0,doi:10.7910/DVN/W7OUZM,Melasma
+g3_dcn_alopeciaareata_01.jpg,g3,"DermaCon-IN (other diagnosis, not used in training)",CC BY-NC-SA 4.0,doi:10.7910/DVN/W7OUZM,Alopecia Areata
+g3_dcn_lichenplanus_01.jpg,g3,"DermaCon-IN (other diagnosis, not used in training)",CC BY-NC-SA 4.0,doi:10.7910/DVN/W7OUZM,Lichen Planus
+g3_dcn_wart_01.jpg,g3,"DermaCon-IN (other diagnosis, not used in training)",CC BY-NC-SA 4.0,doi:10.7910/DVN/W7OUZM,Wart
+g3_dcn_candidalintertrigo_01.jpg,g3,"DermaCon-IN (other diagnosis, not used in training)",CC BY-NC-SA 4.0,doi:10.7910/DVN/W7OUZM,Candidal Intertrigo
+g3_dcn_seborrheicdermatit_01.jpg,g3,"DermaCon-IN (other diagnosis, not used in training)",CC BY-NC-SA 4.0,doi:10.7910/DVN/W7OUZM,Seborrheic Dermatitis
+g3_dcn_keloid_01.jpg,g3,"DermaCon-IN (other diagnosis, not used in training)",CC BY-NC-SA 4.0,doi:10.7910/DVN/W7OUZM,Keloid
+g3_dcn_nevocyticnevus_01.jpg,g3,"DermaCon-IN (other diagnosis, not used in training)",CC BY-NC-SA 4.0,doi:10.7910/DVN/W7OUZM,Nevocytic nevus
+g3_dcn_postinflammatoryhy_01.jpg,g3,"DermaCon-IN (other diagnosis, not used in training)",CC BY-NC-SA 4.0,doi:10.7910/DVN/W7OUZM,Post-Inflammatory hyperpigmentation
+g3_dcn_xerosis_01.jpg,g3,"DermaCon-IN (other diagnosis, not used in training)",CC BY-NC-SA 4.0,doi:10.7910/DVN/W7OUZM,Xerosis
+g3_dcn_acrochordon_01.jpg,g3,"DermaCon-IN (other diagnosis, not used in training)",CC BY-NC-SA 4.0,doi:10.7910/DVN/W7OUZM,Acrochordon
+g3_dcn_pityriasisalba_01.jpg,g3,"DermaCon-IN (other diagnosis, not used in training)",CC BY-NC-SA 4.0,doi:10.7910/DVN/W7OUZM,Pityriasis Alba
+g3_dcn_onychomycosis_01.jpg,g3,"DermaCon-IN (other diagnosis, not used in training)",CC BY-NC-SA 4.0,doi:10.7910/DVN/W7OUZM,Onychomycosis
+g3_dcn_palmoplantarkerato_01.jpg,g3,"DermaCon-IN (other diagnosis, not used in training)",CC BY-NC-SA 4.0,doi:10.7910/DVN/W7OUZM,Palmoplantar Keratoderma
+g3_dcn_dermatosispapulosa_01.jpg,g3,"DermaCon-IN (other diagnosis, not used in training)",CC BY-NC-SA 4.0,doi:10.7910/DVN/W7OUZM,Dermatosis Papulosa Nigra
+g4_blurry_01.jpg,g4,made from g3_dcn_melasma_01.jpg,as source,,blurry
+g4_dark_01.jpg,g4,made from g3_dcn_melasma_01.jpg,as source,,dark
+g4_glare_01.jpg,g4,made from g3_dcn_melasma_01.jpg,as source,,glare
+g4_blurry_02.jpg,g4,made from g3_dcn_alopeciaareata_01.jpg,as source,,blurry
+g4_dark_02.jpg,g4,made from g3_dcn_alopeciaareata_01.jpg,as source,,dark
+g4_glare_02.jpg,g4,made from g3_dcn_alopeciaareata_01.jpg,as source,,glare
+g4_blurry_03.jpg,g4,made from g3_dcn_lichenplanus_01.jpg,as source,,blurry
+g4_dark_03.jpg,g4,made from g3_dcn_lichenplanus_01.jpg,as source,,dark
+g4_glare_03.jpg,g4,made from g3_dcn_lichenplanus_01.jpg,as source,,glare
+g4_blurry_04.jpg,g4,made from g1_mug_01.jpg,as source,,blurry
+g4_dark_04.jpg,g4,made from g1_mug_01.jpg,as source,,dark
+g4_glare_04.jpg,g4,made from g1_mug_01.jpg,as source,,glare
+g4_blurry_05.jpg,g4,made from g1_keyboard_01.jpg,as source,,blurry
+g4_dark_05.jpg,g4,made from g1_keyboard_01.jpg,as source,,dark
+g4_glare_05.jpg,g4,made from g1_keyboard_01.jpg,as source,,glare
+g1_rice_01.jpg,g1,Wikimedia Commons,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:Bowl_of_Cooked_Brown_Rice.jpg,File:Bowl of Cooked Brown Rice.jpg
+g1_orange_01.jpg,g1,Wikimedia Commons,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:Oranges_-_whole-halved-segment.jpg,File:Oranges - whole-halved-segment.jpg
+g1_banana_01.jpg,g1,Wikimedia Commons,CC BY-SA 3.0,https://commons.wikimedia.org/wiki/File:Cavendish_banana_from_Maracaibo.jpg,File:Cavendish banana from Maracaibo.jpg
+g1_leaf_01.jpg,g1,Wikimedia Commons,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:Close-up_of_Chrysomya_(Old_World_blow_fly)_on_a_green_leaf.jpg,File:Close-up of Chrysomya (Old World blow fly) on a green leaf.jpg
+g1_grass_01.jpg,g1,Wikimedia Commons,CC BY 2.0,https://commons.wikimedia.org/wiki/File:Close_up_of_the_lawn_mower_with_grass_and_flowers_in_background.jpg,File:Close up of the lawn mower with grass and flowers in background.jpg
+g1_flower_01.jpg,g1,Wikimedia Commons,Public domain,https://commons.wikimedia.org/wiki/File:French_marigold_garden_2009_G1.jpg,File:French marigold garden 2009 G1.jpg
+g1_bark_01.jpg,g1,Wikimedia Commons,CC BY 4.0,https://commons.wikimedia.org/wiki/File:Rough_tree_bark_surface_texture_macro_side_view.jpg,File:Rough tree bark surface texture macro side view.jpg
+g1_dogfur_01.jpg,g1,Wikimedia Commons,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:Greyhound_Close-up.jpg,File:Greyhound Close-up.jpg
+g1_catfur_01.jpg,g1,Wikimedia Commons,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:Older_Cat_Jasmine_Close_Up.jpg,File:Older Cat Jasmine Close Up.jpg
+g1_kurta_01.jpg,g1,Wikimedia Commons,Public domain,"https://commons.wikimedia.org/wiki/File:Indienne,_Wesserling.JPG","File:Indienne, Wesserling.JPG"
+g1_soil_01.jpg,g1,Wikimedia Commons,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:DFC_3020_A_close-up_of_a_patterned_tortoise_resting_beside_a_shallow_dish_of_greens_on_a_patch_of_soil_and_leaves.jpg,File:DFC 3020 A close-up of a patterned tortoise resting beside a shallow dish of greens on a patch of soil and leaves.jpg
+g2_leather_01.jpg,g2,Wikimedia Commons,CC BY 2.0,https://commons.wikimedia.org/wiki/File:Free_dirty_distressed_scratched_leather_texture_for_layers_creative_commons_(3005071597).jpg,File:Free dirty distressed scratched leather texture for layers creative commons (3005071597).jpg
+g2_woodspoon_01.jpg,g2,Wikimedia Commons,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:Asparagus_soup_(spargelsuppe).jpg,File:Asparagus soup (spargelsuppe).jpg
+g2_sand_01.jpg,g2,Wikimedia Commons,Public Domain,https://commons.wikimedia.org/wiki/File:Gfp-grainy-sand-texture.jpg,File:Gfp-grainy-sand-texture.jpg
+g2_dough_01.jpg,g2,Wikimedia Commons,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:Cebularz_zamojski.jpg,File:Cebularz zamojski.jpg
+g2_peanutbutter_01.jpg,g2,Wikimedia Commons,Public domain,https://commons.wikimedia.org/wiki/File:Peanut-Butter-Jelly-Sandwich.jpg,File:Peanut-Butter-Jelly-Sandwich.jpg
+g2_strawberry_01.jpg,g2,Wikimedia Commons,CC BY 4.0,https://commons.wikimedia.org/wiki/File:Strawberry_surface_close_up_macro.jpg,File:Strawberry surface close up macro.jpg
+g2_redcloth_01.jpg,g2,Wikimedia Commons,CC BY-SA 3.0,https://commons.wikimedia.org/wiki/File:Table-cloth_2008-1.jpg,File:Table-cloth 2008-1.jpg
+g2_chickenskin_01.jpg,g2,Wikimedia Commons,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:Processed_Frozen_Chicken_Feet_%26_frozen_chicken_Paws.jpg,File:Processed Frozen Chicken Feet & frozen chicken Paws.jpg
+g3_healthyarm_01.jpg,g3,Wikimedia Commons,CC0,https://commons.wikimedia.org/wiki/File:Skinhyperelasticity-1.jpg,File:Skinhyperelasticity-1.jpg
+g3_hand_01.jpg,g3,Wikimedia Commons,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:HK_human_being_male_%E6%89%8B%E8%83%8C_hand_back_August_2023_Px3.jpg,File:HK human being male 手背 hand back August 2023 Px3.jpg
+g3_palm_01.jpg,g3,Wikimedia Commons,CC BY-SA 4.0,"https://commons.wikimedia.org/wiki/File:Open_Palm_of_the_Left_Hand,_Fingers.jpg","File:Open Palm of the Left Hand, Fingers.jpg"
+g3_tattoo_01.jpg,g3,Wikimedia Commons,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:Ambigram_tattoo_New_York_Rich_Man.jpg,File:Ambigram tattoo New York Rich Man.jpg
+g3_hand2_01.jpg,g3,Wikimedia Commons,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:Henna_Hand_-_%E0%B4%AE%E0%B5%88%E0%B4%B2%E0%B4%BE%E0%B4%9E%E0%B5%8D%E0%B4%9A%E0%B4%BF_%E0%B4%95%E0%B5%88.jpg,File:Henna Hand - മൈലാഞ്ചി കൈ.jpg
+g3_mole_01.jpg,g3,Wikimedia Commons,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:Dermatoscopy_Nevus_Reticular.jpg,File:Dermatoscopy Nevus Reticular.jpg

@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
+import { Fraunces, Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 
-const geist = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+const fraunces = Fraunces({ variable: "--font-fraunces", subsets: ["latin"], style: ["normal", "italic"] });
+const hanken = Hanken_Grotesk({ variable: "--font-hanken", subsets: ["latin"] });
+const jetbrains = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "LuminaSkin",
@@ -12,22 +14,32 @@ export const metadata: Metadata = {
   appleWebApp: { capable: true, title: "LuminaSkin", statusBarStyle: "default" },
 };
 
-export const viewport: Viewport = { themeColor: "#0f766e", width: "device-width", initialScale: 1 };
+export const viewport: Viewport = { themeColor: "#F3EFE6", width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${geist.variable} antialiased min-h-dvh`}>
-        <header className="sticky top-0 z-10 bg-background/90 backdrop-blur border-b border-black/5">
-          <nav className="mx-auto max-w-md px-4 h-14 flex items-center justify-between">
-          <a href="/" className="font-semibold text-brand text-lg">LuminaSkin</a>
-          <div className="flex items-center gap-4 text-sm">
-            <Link href="/scan" className="font-medium text-brand">New scan</Link>
-            <Link href="/history" className="text-black/60">My scans</Link>
-          </div>
+      <body className={`${fraunces.variable} ${hanken.variable} ${jetbrains.variable} antialiased min-h-dvh flex flex-col`}>
+        <header className="sticky top-0 z-10 border-b border-rule bg-background/95 backdrop-blur">
+          <nav className="wrap flex min-h-[64px] items-center justify-between gap-6">
+            <a href="/" aria-label="LuminaSkin, home" className="font-serif text-[1.45rem] font-semibold leading-none tracking-[-0.02em]">
+              Lumina<i className="font-normal">Skin</i>
+            </a>
+            <div className="flex items-center gap-5 sm:gap-8 text-[0.94rem] font-medium">
+              <Link href="/history" className="border-b border-transparent py-1 hover:border-foreground">My scans</Link>
+              <Link href="/scan" className="btn btn-ink btn-sm">
+                <span className="hidden sm:inline">Start a scan</span><span className="sm:hidden">Scan</span>
+                <span className="font-mono font-normal">→</span>
+              </Link>
+            </div>
           </nav>
         </header>
-        <main className="mx-auto max-w-md px-4 pb-16">{children}</main>
+        <main className="wrap flex-1 pb-20">{children}</main>
+        <footer className="border-t border-rule">
+          <div className="wrap py-7 text-[0.85rem] text-muted">
+            <p><b className="text-foreground">LuminaSkin</b> is a triage aid, not a diagnosis. It has not been clinically validated. Always consult a qualified doctor.</p>
+          </div>
+        </footer>
       </body>
     </html>
   );

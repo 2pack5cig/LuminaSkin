@@ -395,12 +395,12 @@
   <section class="stats" id="evidence" aria-label="Evaluation results">
     <div class="wrap">
       <div class="stats-grid">
-        <div class="stat"><b>13</b><span>common skin conditions, plus a clinical scabies screen</span></div>
-        <div class="stat"><b>88.9%</b><span>top-3 correct: the right condition was among the 3 shown, on a held-out test of 306 cases</span></div>
-        <div class="stat"><b>85.7%</b><span>same measure on Fitzpatrick IV&ndash;VI skin (medium-brown to dark tones)</span></div>
+        <div class="stat"><b>15</b><span>common skin conditions, including scabies and vitiligo</span></div>
+        <div class="stat"><b>90.6%</b><span>top-3 correct on Indian patients (held-out DermaCon-IN test); our earlier SCIN-only model scored 69.4% on the same cases</span></div>
+        <div class="stat"><b>89.1%</b><span>top-3 correct on Fitzpatrick IV&ndash;VI skin (medium-brown to dark tones), the same as on lighter skin (89.4%)</span></div>
         <div class="stat"><b>3</b><span>photos per scan: close-up, angle, distance</span></div>
       </div>
-      <p class="stats-note">SCIN held-out test set, evaluated once, split by patient case. Only 2 Fitzpatrick VI cases in the test set, so figures for the darkest tones are uncertain. Macro recall is lower (59.7% overall, 54.0% for IV&ndash;VI). Not clinically validated.</p>
+      <p class="stats-note">Held-out test of 612 cases (SCIN + DermaCon-IN), split by patient and evaluated once. Overall top-3 89.1%; macro recall (fair across all conditions) 63.9% overall and 51.1% for IV&ndash;VI. Only 8 Fitzpatrick VI test cases, so figures for the darkest tones are uncertain. Not clinically validated.</p>
     </div>
   </section>
 
@@ -444,7 +444,7 @@
           <div class="idx"><span>01</span><span>Result</span></div>
           <p class="big" aria-hidden="true">3</p>
           <h3>The three most likely conditions, not a single verdict.</h3>
-          <p>Photo models and a symptom model are fused into one ranking across 13 common conditions, with related ones grouped as an eczema family. It works with or without your answers to the questions.</p>
+          <p>Photo models and a symptom model are fused into one ranking across 15 common conditions, with related ones grouped as an eczema family. It works with or without your answers. Then 2&ndash;4 follow-up questions help tell look-alikes apart and add &ldquo;could also be&rdquo; hints, without changing the AI&rsquo;s ranking.</p>
           <ol class="pipeline" aria-label="How a scan is processed">
             <li><span>01</span><span>Photo quality check: blur, darkness, glare</span></li>
             <li><span>02</span><span>&ldquo;Not skin / unusual photo&rdquo; check</span></li>
@@ -460,14 +460,14 @@
           <p>Grad-CAM++ highlights the part of your photo that drove the result, so you can tell if it looked at the rash or at something else.</p>
           <div class="crit" aria-hidden="true">
             <div><i>&rarr;</i><span>Overlay on your own photo</span></div>
-            <div><i>&rarr;</i><span>Uses the photo that mattered most</span></div>
+            <div><i>&rarr;</i><span>Made on your close-up photo</span></div>
           </div>
         </article>
 
         <article class="tile" id="safety">
           <div class="idx"><span>03</span><span>Safety</span></div>
           <h3>Red flags are fixed rules, not AI.</h3>
-          <p>On every scan, before and independent of the model: trouble breathing, mouth sores, fever with a spreading rash, pus with fever, and fast spread all trigger clear guidance on how soon to see a doctor.</p>
+          <p>On every scan, before and independent of the model: trouble breathing or lip/tongue swelling, a rash near the eye or on the tip of the nose, fast-spreading hot redness, a new medicine with fever or blisters, mouth sores, fever with a spreading rash, and pus all trigger clear guidance on how soon to see a doctor. A numb patch prompts a leprosy check, and steroid-cream use triggers a warning.</p>
           <div class="levels" aria-label="Urgency levels">
             <span class="chip solid">Emergency</span><span class="chip">Urgent</span><span class="chip">See soon</span>
           </div>
@@ -475,8 +475,8 @@
 
         <article class="tile">
           <div class="idx"><span>04</span><span>Screen</span></div>
-          <h3>A scabies screen from clinical criteria.</h3>
-          <p>Photos alone rarely show scabies, so this uses the history doctors rely on: an itchy rash, itchy people at home, and night itch or spots between fingers and on wrists.</p>
+          <h3>Scabies: the AI plus a clinical screen.</h3>
+          <p>The AI now recognises scabies from Indian clinic photos, but photos can miss it, so a screen also uses the history doctors rely on: an itchy rash, itchy people at home (or both typical signs if you live alone), and night itch or spots between fingers and on wrists.</p>
           <div class="crit">
             <div><i>01</i><span>Itchy rash</span></div>
             <div><i>02</i><span>Others at home itchy</span></div>
@@ -532,22 +532,22 @@
         <div class="faq-item">
           <h3 class="faq-q"><button type="button" aria-expanded="false" aria-controls="a2" id="q2">Does it really work on darker skin?<span class="plus" aria-hidden="true"></span></button></h3>
           <div class="faq-a" id="a2" role="region" aria-labelledby="q2"><div>
-            <p>It is evaluated separately on Fitzpatrick IV&ndash;VI skin, where top-3 accuracy on the held-out test set was 85.7% (88.9% overall).</p>
-            <p><strong>The honest caveat:</strong> public datasets have few dark-skin examples, and the test set has only 2 Fitzpatrick VI cases. We also tried adding 277 more dark-skin images; it did not beat the baseline on held-out data, so the simpler model is the default.</p>
+            <p>It is evaluated separately on Fitzpatrick IV&ndash;VI skin, where top-3 accuracy on the held-out test was 89.1%, the same as on lighter skin. On Indian patients (DermaCon-IN test) it was 90.6%, and 94.2% for Fitzpatrick V&ndash;VI.</p>
+            <p><strong>The honest caveat:</strong> there are still few of the very darkest skin tones (only 8 Fitzpatrick VI test cases). Adding Indian data made a big difference on Indian patients, but on the older US-collected SCIN dark-skin cases the new model was slightly lower (top-3 82.9% vs 85.7% on 70 cases). An earlier experiment with 277 web images did not help, so we did not ship it.</p>
           </div></div>
         </div>
 
         <div class="faq-item">
           <h3 class="faq-q"><button type="button" aria-expanded="false" aria-controls="a3" id="q3">Why three photos?<span class="plus" aria-hidden="true"></span></button></h3>
           <div class="faq-a" id="a3" role="region" aria-labelledby="q3"><div>
-            <p>A close-up, an angled shot and a distance shot give the model more to work with. On cases with two or more photos, top-3 accuracy rose from 82.8% with one photo to 89.2% with several. One photo still works.</p>
+            <p>A close-up, an angled shot and a distance shot give the model more to work with. In our measurements (earlier model, cases with two or more photos), top-3 accuracy rose from 82.8% with one photo to 89.2% with several. One photo still works.</p>
           </div></div>
         </div>
 
         <div class="faq-item">
           <h3 class="faq-q"><button type="button" aria-expanded="false" aria-controls="a4" id="q4">Which conditions does it cover?<span class="plus" aria-hidden="true"></span></button></h3>
           <div class="faq-a" id="a4" role="region" aria-labelledby="q4"><div>
-            <p>Thirteen common conditions: acne, contact dermatitis, eczema, folliculitis, herpes simplex, herpes zoster, impetigo, insect bite, pityriasis rosea, psoriasis, tinea, tinea versicolor and urticaria. Scabies is handled by a separate clinical-criteria screen.</p>
+            <p>Fifteen common conditions: acne, contact dermatitis, eczema, folliculitis, herpes simplex, herpes zoster (shingles), impetigo, insect bite, pityriasis rosea, psoriasis, scabies, tinea (ringworm), tinea versicolor, urticaria (hives) and vitiligo. Follow-up questions can also point to conditions the AI doesn&rsquo;t assess, such as chickenpox, heat rash, drug reactions or leprosy, and tell you to see a doctor.</p>
             <p>Anything outside these, including skin cancer, is not covered. If a spot is changing, bleeding or worrying you, see a doctor.</p>
           </div></div>
         </div>
@@ -555,7 +555,7 @@
         <div class="faq-item">
           <h3 class="faq-q"><button type="button" aria-expanded="false" aria-controls="a5" id="q5">What if my rash is serious?<span class="plus" aria-hidden="true"></span></button></h3>
           <div class="faq-a" id="a5" role="region" aria-labelledby="q5"><div>
-            <p>Fixed rules run on every scan, separately from the AI. Trouble breathing with a rash is treated as an emergency. Mouth sores, or fever with a spreading, oozing or blistering rash, are marked urgent. Fast spread, pus or bleeding means see a doctor soon.</p>
+            <p>Fixed rules run on every scan, separately from the AI. Trouble breathing or swelling of the lips, tongue or eyelids is treated as an emergency, as is a new medicine with fever, mouth sores or blisters. A rash near the eye or on the tip of the nose, fast-spreading hot redness, mouth sores, or fever with a spreading, oozing or blistering rash are marked urgent. Fast spread, pus, bleeding or a growing spot means see a doctor soon.</p>
             <p>If you feel unwell, don&rsquo;t wait for an app. Get care.</p>
           </div></div>
         </div>
@@ -563,7 +563,7 @@
         <div class="faq-item">
           <h3 class="faq-q"><button type="button" aria-expanded="false" aria-controls="a6" id="q6">Where do my photos go?<span class="plus" aria-hidden="true"></span></button></h3>
           <div class="faq-a" id="a6" role="region" aria-labelledby="q6"><div>
-            <p>Photos are sent to the LuminaSkin analysis server only to be scored. In the current setup that server runs on your own laptop, and your phone connects to it over your Wi-Fi. Your scan history is stored on your phone.</p>
+            <p>Photos are sent to the LuminaSkin analysis server only to be scored. In the current setup that server runs on our team's laptop; your phone reaches it over Wi-Fi or through a secure (HTTPS) ngrok tunnel. Photos are not stored on the server. Your scan history is stored on your phone.</p>
           </div></div>
         </div>
       </div>
@@ -590,7 +590,7 @@
   <div class="wrap foot-grid">
     <div>
       <p><strong>LuminaSkin</strong> is a triage aid, not a diagnosis. It has not been clinically validated. Always consult a qualified doctor.</p>
-      <p>Trained on SCIN (Skin Condition Image Network) &copy; Google. Dark-skin experiments used Fitzpatrick17k, Groh et al. 2021, CC BY-NC-SA 3.0. Embeddings from Derm Foundation by Google Health AI Developer Foundations.</p>
+      <p>Trained on SCIN (Skin Condition Image Network) &copy; Google and DermaCon-IN (Madarkar et al., IIT Hyderabad, 2025; CC BY-NC-SA 4.0). Earlier experiments used Fitzpatrick17k, Groh et al. 2021, CC BY-NC-SA 3.0. Embeddings from Derm Foundation by Google Health AI Developer Foundations.</p>
     </div>
     <div>
       <p><a href="#top">Back to top</a></p>
@@ -603,7 +603,7 @@
 <script>
   // Point every "Start a scan" button at the running LuminaSkin web app.
   // Change this to wherever the Next.js frontend is served (e.g. http://<laptop-ip>:3000).
-  const APP_URL = "http://localhost:3000";
+  const APP_URL = "/scan";  // same site: works on localhost, Wi-Fi IP and ngrok
   document.querySelectorAll("[data-app]").forEach(a => { a.href = APP_URL; });
 
   // FAQ accordion: buttons toggle aria-expanded and the panel's open state.

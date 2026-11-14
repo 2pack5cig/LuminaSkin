@@ -23,3 +23,26 @@ ml/models_v2b/
 
 # large prediction dumps
 *.npz
+
+# v3 data: photos / embeddings / caches are not re-shared (dataset licences); keep the split + class list
+ml/data/v3/*
+!ml/data/v3/split_v3.json
+!ml/data/v3/class_map_v3.json
+!ml/data/dermacon_map.json
+# negatives: images not re-shared; keep the list of sources/licences and the results
+ml/data/negatives/*
+!ml/data/negatives/sources.csv
+!ml/data/negatives/results_v3.csv
+# v3 working models: only the report is kept (the live model is ml/models_v3_final)
+ml/models_v3/*
+!ml/models_v3/report.json
+# (re-include the folders so the exceptions above apply)
+!ml/data/v3/
+ml/data/v3/*
+!ml/data/v3/split_v3.json
+!ml/data/v3/class_map_v3.json
+!ml/data/negatives/
+ml/data/negatives/*
+!ml/data/negatives/sources.csv
+!ml/data/negatives/results_v3.csv
+!ml/data/dermacon_map.json

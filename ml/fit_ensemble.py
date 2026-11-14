@@ -105,8 +105,10 @@ def main():
         d = imgs[imgs.split == s]
         p_lr = case_mean(d, lr.predict_proba(scaler.transform(X(d))), cid)
         e = eff[s]
-        e_df = pd.DataFrame({"image_idx": e["image_idx"]}).merge(imgs[["image_idx", "case_id"]], on="image_idx")
-        p_eff = case_mean(e_df, e["probs"][: len(e_df)], cid)
+        # keep each prediction attached to ITS photo (a plain slice misaligns rows when some photos are missing)
+        e_df = pd.DataFrame({"image_idx": e["image_idx"], "row": np.arange(len(e["image_idx"]))}).merge(
+            imgs[["image_idx", "case_id"]], on="image_idx")
+        p_eff = case_mean(e_df, e["probs"][e_df["row"].to_numpy()], cid)
         feats = np.stack([featurize_scin_row(cases.loc[c]) for c in cid])
         p_sym = xgb_sym.predict_proba(feats)
         ok = ~np.isnan(p_lr).any(1) & ~np.isnan(p_eff).any(1)

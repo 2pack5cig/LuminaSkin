@@ -4,9 +4,22 @@ export type Shot = "close_up" | "angle" | "distance" | "extra_close_up";
 export type Photo = { blob: Blob; dataUrl: string; shot: Shot };
 export type Ranked = { label: string; prob: number; members?: { label: string; prob: number }[] };
 
+export type Alert = { kind: string; level: "urgent" | "soon" | "info"; title: string; text: string };
+export type FollowUp = { id: string; text: string };
+export type AlsoConsider = {
+  name: string; covered_by_ai: boolean; reasons: string[]; severity: number;
+  summary?: string; contagious?: string | null; soothing_care?: Care[]; see_doctor_when?: string[];
+};
+export type Hints = { fits: { label: string; reasons: string[] }[]; also_consider: AlsoConsider[]; alerts: string[]; note: string };
+
+export type MedicineWarning = {
+  show: boolean; level: "danger" | "warn"; title: string; why: string; reasons: string[];
+  medicines: { name: string; examples: string }[]; already_used: boolean; used_text: string | null; do_instead: string;
+};
+
 export type AnalyzeResult = {
-  quality: { ok: boolean; issues: Issue[]; metrics: Record<string, number>; skipped_photos?: { index: number; shot: Shot | null; issues: Issue[] }[] };
-  ood: { rejected: boolean; reason: "NOT_SKIN" | "OUT_OF_DISTRIBUTION" | null };
+  quality: { ok: boolean; issues: Issue[]; warnings?: Issue[]; metrics: Record<string, number>; skipped_photos?: { index: number; shot: Shot | null; issues: Issue[] }[] };
+  ood: { rejected: boolean; reason: "NOT_SKIN" | "OUT_OF_DISTRIBUTION" | null; unusual?: boolean };
   red_flags: { urgent: boolean; level: "emergency" | "urgent" | "soon" | null; reasons: string[] };
   scabies?: {
     positive: boolean; prominent?: boolean; reasons: string[]; basis: string;
@@ -29,6 +42,11 @@ export type AnalyzeResult = {
   } | null;
   disclaimer: string;
   mock?: boolean;
+  alerts?: Alert[];
+  medicine_warning?: MedicineWarning;
+  followups?: FollowUp[];
+  hints?: Hints;
+  followup_answers?: Record<string, string>;
 };
 
 export type Answers = {
@@ -43,6 +61,8 @@ export type Scan = {
   id: string;
   date: string; // ISO
   thumb: string; // small JPEG data URL
+  photoThumbs?: { thumb: string; shot: Shot }[]; // all photos, small JPEGs (for the doctor PDF / history)
+  heatmapThumb?: string; // close-up with the Grad-CAM++ overlay, small JPEG
   answers: Answers;
   result: AnalyzeResult;
 };

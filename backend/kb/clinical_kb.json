@@ -402,5 +402,30 @@
       "Thick crusted skin (crusted scabies - very contagious)",
       "Babies, elderly, or pregnant family members are affected"
     ]
+  },
+  "Vitiligo": {
+    "summary": "Vitiligo causes milk-white or very pale patches where the skin has lost its colour (pigment). Patches usually have sharp edges, no scaling and no itch, and often appear on hands, face, around the mouth and eyes, or genitals. It is much more visible on brown skin.",
+    "contagious": "No. It is not an infection and cannot spread to others.",
+    "steroid_warning": "Do not use steroid or 'fairness' creams on your own. Some prescription creams are used for vitiligo, but only under a doctor's care.",
+    "soothing_care": [
+      {
+        "tip": "Protect white patches from the sun (shade, clothing, sunscreen); they burn easily.",
+        "caution": null
+      },
+      {
+        "tip": "Avoid scratching, rubbing or injuring the skin, which can trigger new patches.",
+        "caution": null
+      },
+      {
+        "tip": "Cosmetic cover creams can be used if you wish.",
+        "caution": "Patch-test first."
+      }
+    ],
+    "see_doctor_when": [
+      "You want treatment - early treatment works best",
+      "Patches are spreading quickly",
+      "A patch feels numb (needs a check to rule out leprosy)",
+      "You feel low or anxious about how it looks - support is available"
+    ]
   }
 }

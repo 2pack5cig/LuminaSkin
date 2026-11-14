@@ -1,0 +1,68 @@
+group,file,result,top
+g1,g1_mug_01.jpg,CONFIDENT,Dermatitis (eczema family)
+g1,g1_keyboard_01.jpg,refused,
+g1,g1_remote_01.jpg,refused,
+g1,g1_bottle_01.jpg,CONFIDENT,Dermatitis (eczema family)
+g1,g1_building_01.jpg,refused,
+g1,g1_wall_01.jpg,refused,
+g1,g1_tiles_01.jpg,refused,
+g1,g1_table_01.jpg,refused,
+g1,g1_bedsheet_01.jpg,refused,
+g1,g1_carpet_01.jpg,not confident,Psoriasis
+g1,g1_fire_01.jpg,not confident,Tinea
+g1,g1_dal_01.jpg,refused,
+g3,g3_dcn_melasma_01.jpg,CONFIDENT,Contact Dermatitis
+g3,g3_dcn_alopeciaareata_01.jpg,refused,
+g3,g3_dcn_lichenplanus_01.jpg,CONFIDENT,Tinea
+g3,g3_dcn_wart_01.jpg,CONFIDENT,Impetigo
+g3,g3_dcn_candidalintertrigo_01.jpg,not confident,Impetigo
+g3,g3_dcn_seborrheicdermatit_01.jpg,not confident,Tinea
+g3,g3_dcn_keloid_01.jpg,CONFIDENT,Contact Dermatitis
+g3,g3_dcn_nevocyticnevus_01.jpg,not confident,Tinea Versicolor
+g3,g3_dcn_postinflammatoryhy_01.jpg,not confident,Pityriasis Rosea
+g3,g3_dcn_xerosis_01.jpg,CONFIDENT,Dermatitis (eczema family)
+g3,g3_dcn_acrochordon_01.jpg,not confident,Scabies
+g3,g3_dcn_pityriasisalba_01.jpg,CONFIDENT,Tinea Versicolor
+g3,g3_dcn_onychomycosis_01.jpg,CONFIDENT,Dermatitis (eczema family)
+g3,g3_dcn_palmoplantarkerato_01.jpg,CONFIDENT,Tinea
+g3,g3_dcn_dermatosispapulosa_01.jpg,refused,
+g4,g4_blurry_01.jpg,retake,
+g4,g4_dark_01.jpg,retake,
+g4,g4_glare_01.jpg,retake,
+g4,g4_blurry_02.jpg,refused,
+g4,g4_dark_02.jpg,retake,
+g4,g4_glare_02.jpg,retake,
+g4,g4_blurry_03.jpg,CONFIDENT,Tinea
+g4,g4_dark_03.jpg,retake,
+g4,g4_glare_03.jpg,retake,
+g4,g4_blurry_04.jpg,retake,
+g4,g4_dark_04.jpg,retake,
+g4,g4_glare_04.jpg,retake,
+g4,g4_blurry_05.jpg,retake,
+g4,g4_dark_05.jpg,retake,
+g4,g4_glare_05.jpg,retake,
+g1,g1_rice_01.jpg,refused,
+g1,g1_orange_01.jpg,refused,
+g1,g1_banana_01.jpg,refused,
+g1,g1_leaf_01.jpg,CONFIDENT,Dermatitis (eczema family)
+g1,g1_grass_01.jpg,refused,
+g1,g1_flower_01.jpg,refused,
+g1,g1_bark_01.jpg,refused,
+g1,g1_dogfur_01.jpg,refused,
+g1,g1_catfur_01.jpg,refused,
+g1,g1_kurta_01.jpg,refused,
+g1,g1_soil_01.jpg,refused,
+g2,g2_leather_01.jpg,CONFIDENT,Tinea
+g2,g2_woodspoon_01.jpg,refused,
+g2,g2_sand_01.jpg,refused,
+g2,g2_dough_01.jpg,refused,
+g2,g2_peanutbutter_01.jpg,refused,
+g2,g2_strawberry_01.jpg,refused,
+g2,g2_redcloth_01.jpg,refused,
+g2,g2_chickenskin_01.jpg,not confident,Contact Dermatitis
+g3,g3_healthyarm_01.jpg,CONFIDENT,Dermatitis (eczema family)
+g3,g3_hand_01.jpg,not confident,Vitiligo
+g3,g3_palm_01.jpg,CONFIDENT,Dermatitis (eczema family)
+g3,g3_tattoo_01.jpg,refused,
+g3,g3_hand2_01.jpg,refused,
+g3,g3_mole_01.jpg,not confident,Tinea

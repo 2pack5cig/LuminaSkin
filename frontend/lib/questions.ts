@@ -1,5 +1,6 @@
 // Question keys match SCIN column names (feature_spec.json) so the model sees the same features it was trained on.
-// pus_oozing / rapid_spread and the "About the itch" items are not in SCIN: they feed rule-based checks only (red flags, scabies screening).
+// pus_oozing / rapid_spread, the "About the itch", "Safety check" and "About you" items are not in SCIN:
+// they feed rule-based checks only (red flags, scabies screening, alerts) - never the AI.
 
 export const DURATIONS: [string, string][] = [
   ["ONE_DAY", "1 day"],
@@ -13,6 +14,24 @@ export const DURATIONS: [string, string][] = [
 ];
 
 export const GROUPS: { title: string; items: [string, string][] }[] = [
+  {
+    title: "Safety check (tap any that apply)",
+    items: [
+      ["lip_tongue_swelling", "Lips, tongue or eyelids swelling"],
+      ["near_eye_nose", "On the eyelid, near the eye or tip of the nose"],
+      ["spreading_red_hot", "Redness, heat and pain spreading fast"],
+      ["numb_patch", "A patch feels numb / less sensitive to touch"],
+      ["new_medicine", "Started a new medicine in the last 4 weeks"],
+      ["steroid_cream", "Used a pharmacy or steroid cream on it (e.g. Betnovate, Panderm, Quadriderm, Fourderm)"],
+    ],
+  },
+  {
+    title: "About you",
+    items: [
+      ["is_child", "This is for a child (under 12)"],
+      ["is_pregnant", "I am pregnant"],
+    ],
+  },
   {
     title: "What does the rash feel like?",
     items: [
@@ -39,7 +58,8 @@ export const GROUPS: { title: string; items: [string, string][] }[] = [
     title: "About the itch",
     items: [
       ["itch_worse_night", "Worse at night"],
-      ["household_itchy", "Others at home itchy too"],
+      ["household_itchy", "Others at home / close contacts itchy too"],
+      ["lives_alone", "I live alone"],
       ["finger_wrist_spots", "Spots between fingers / on wrists"],
     ],
   },
@@ -79,3 +99,6 @@ export function labelFor(key: string) {
   for (const g of GROUPS) for (const [k, l] of g.items) if (k === key) return l;
   return key;
 }
+
+/** Pairs where choosing one un-chooses the other. */
+export const EXCLUSIVE: Record<string, string> = { household_itchy: "lives_alone", lives_alone: "household_itchy" };

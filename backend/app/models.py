@@ -12,7 +12,7 @@ from .features import featurize
 from .fusion import LogPool, to_logp
 
 ROOT = Path(__file__).resolve().parent.parent.parent
-MODELS = Path(os.getenv("MODELS_DIR", ROOT / "ml" / "models"))
+MODELS = Path(os.getenv("MODELS_DIR", ROOT / "ml" / "models_v3_final"))  # live model (v3 retrained on 100% of data)
 REQUIRED = ["ensemble.joblib", "effnet_b0.pt", "symptom_gb.joblib"]
 MEAN, STD = np.array([0.485, 0.456, 0.406]), np.array([0.229, 0.224, 0.225])
 
@@ -101,8 +101,9 @@ class Pipeline:
             emb = self._derm_embedding(rgb)
             ood = self.gate.check(bgr, emb, self.min_skin)
             oods.append(ood)
-            if not ood["rejected"]:
+            if not ood["rejected"]:               # unusual-but-plausible photos are still analysed, marked not confident
                 kept.append((rgb, emb))
+        unusual = any(o.get("unusual") and not o["rejected"] for o in oods)
         if not kept:
             return {"ood": oods[0], "top3": None, "uncertain": False, "contributions": None,
                     "symptoms_used": False, "heatmap_png_b64": None, "photos_used": 0}
@@ -119,9 +120,9 @@ class Pipeline:
         order = np.argsort(p)[::-1][:3]
         top3 = [{"label": self.classes[i], "prob": round(float(p[i]), 3)} for i in order]
         return {
-            "ood": {"rejected": False, "reason": None, "photos_rejected": len(bgrs) - len(kept)},
+            "ood": {"rejected": False, "reason": None, "unusual": unusual, "photos_rejected": len(bgrs) - len(kept)},
             "top3": top3,
-            "uncertain": bool(p[order[0]] < self.p_min),
+            "uncertain": bool(p[order[0]] < self.p_min) or unusual,
             "contributions": self.pool.contributions(logps[:, 0, :], has_sym, {"image": [0, 1], "symptoms": [2]}),
             "symptoms_used": has_sym,
             "heatmap_png_b64": self._heatmap(xs[0], kept[0][0], int(order[0])),

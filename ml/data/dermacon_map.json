@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "map": {
+    "Tinea": [
+      "Tinea Corporis",
+      "Tinea Cruris",
+      "Tinea Faciei",
+      "Steroid Modified Tinea",
+      "Tinea",
+      "Tinea Manuum",
+      "Tinea pedis",
+      "Infected Tinea",
+      "Eczemated Tinea",
+      "Tinea Infected with secondary bacterial Infection"
+    ],
+    "Acne": [
+      "Acne",
+      "Truncal Acne",
+      "Acne Conglobata"
+    ],
+    "Eczema": [
+      "Eczema",
+      "Infected Eczema",
+      "Atopic Dermatitis",
+      "Disseminated Eczema",
+      "Ear Eczema",
+      "Dry Discoid Eczema",
+      "Chronic eczema with secondary infection",
+      "Crusted eczematous dermatitis"
+    ],
+    "Psoriasis": [
+      "Psoriasis",
+      "Chronic plaque psoriasis",
+      "Guttate Psoriasis",
+      "Psoriasis Vulgaris",
+      "Palmar psoriasis",
+      "Inverse psoriasis"
+    ],
+    "Contact Dermatitis": [
+      "Contact Dermatitis",
+      "Allergic Contact Dermatitis",
+      "Textile Dermatitis",
+      "Kumkum Dermatitis",
+      "Contact Dermatitis with secondary infection"
+    ],
+    "Tinea Versicolor": [
+      "Tinea Versicolor"
+    ],
+    "Urticaria": [
+      "Urticaria"
+    ],
+    "Insect Bite": [
+      "Insect Bite Reaction",
+      "Pruritic Urticarial Papules"
+    ],
+    "Herpes Zoster": [
+      "Herpes Zoster"
+    ],
+    "Impetigo": [
+      "Impetigo"
+    ],
+    "Folliculitis": [
+      "Folliculitis"
+    ],
+    "Pityriasis Rosea": [
+      "Pityriasis rosea"
+    ],
+    "Herpes Simplex": [
+      "Herpes Labialis",
+      "Herpes genitalis"
+    ],
+    "Scabies": [
+      "Scabies",
+      "Nodular Scabies",
+      "Scabies Infected",
+      "Pustular Scabies"
+    ],
+    "Vitiligo": [
+      "Vitiligo"
+    ]
+  },
+  "excluded": {
+    "Furuncle": "boil needs a doctor; not merged with mild folliculitis",
+    "Tinea Capitis": "scalp ringworm looks different and needs prescription tablets",
+    "Pustular psoriasis": "serious distinct form",
+    "Urticarial vasculitis": "different, more serious condition",
+    "Varicella Zoster": "ambiguous (chickenpox vs shingles)"
+  },
+  "decided": "2026-11-14"
+}

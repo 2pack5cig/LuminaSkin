@@ -1,4 +1,4 @@
-import type { AnalyzeResult, Answers, Photo } from "./types";
+import type { AnalyzeResult, Answers, Hints, Photo } from "./types";
 import { ALL_KEYS } from "./questions";
 
 // Model input: if the user skipped, send {} so the backend uses image-only mode.
@@ -17,6 +17,15 @@ export async function analyze(photos: Photo[], a: Answers): Promise<AnalyzeResul
   fd.append("shots", JSON.stringify(photos.map((p) => p.shot)));
   fd.append("symptoms", JSON.stringify(symptomsPayload(a)));
   const res = await fetch("/api/analyze", { method: "POST", body: fd });
+  if (!res.ok) throw new Error(`Server error ${res.status}`);
+  return res.json();
+}
+
+export async function getHints(topLabels: string[], answers: Record<string, string>): Promise<Hints> {
+  const res = await fetch("/api/hints", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ top_labels: topLabels, answers }),
+  });
   if (!res.ok) throw new Error(`Server error ${res.status}`);
   return res.json();
 }

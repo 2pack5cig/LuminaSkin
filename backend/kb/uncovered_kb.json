@@ -1,0 +1,132 @@
+{
+  "Leprosy (Hansen's disease)": {
+    "severity": 3,
+    "summary": "A slow bacterial infection of the skin and nerves. A typical early sign is a pale or reddish patch with reduced feeling (numbness) to touch, heat or pain. It is fully curable with free treatment in India.",
+    "contagious": "Only weakly, after long close contact with an untreated person. Once treatment starts it stops spreading.",
+    "soothing_care": [
+      {
+        "tip": "Protect numb skin from burns and cuts (check hands and feet daily).",
+        "caution": null
+      }
+    ],
+    "see_doctor_when": [
+      "Any patch with reduced feeling - see a doctor or government health centre soon; diagnosis and treatment are free under India's National Leprosy Eradication Programme"
+    ]
+  },
+  "Chickenpox": {
+    "severity": 2,
+    "summary": "A viral infection causing very itchy spots that turn into blisters and crusts, spreading over the face, chest, back and both sides of the body, often with fever. New spots keep appearing for a few days.",
+    "contagious": "Yes - very, from 1-2 days before the rash until all blisters have crusted. Stay home and avoid pregnant women, newborns and people with weak immunity.",
+    "soothing_care": [
+      {
+        "tip": "Cool baths and calamine lotion for itch.",
+        "caution": "Not on open, raw skin."
+      },
+      {
+        "tip": "Keep nails short; wear loose cotton clothes.",
+        "caution": null
+      },
+      {
+        "tip": "Drink plenty of fluids.",
+        "caution": null
+      }
+    ],
+    "see_doctor_when": [
+      "You are an adult, pregnant, or have weak immunity",
+      "A baby has it",
+      "Breathing difficulty, severe headache, confusion, or skin around spots becomes red, hot and painful"
+    ]
+  },
+  "Drug reaction (medicine rash)": {
+    "severity": 3,
+    "summary": "A rash caused by a medicine, usually starting days to weeks after a new tablet, injection or ointment (e.g. antibiotics, painkillers, seizure medicines). Most are mild, but some are serious.",
+    "contagious": "No.",
+    "soothing_care": [
+      {
+        "tip": "Keep the medicine strip/packet and show it to your doctor.",
+        "caution": "Do not stop a prescribed medicine without asking a doctor - but get help urgently if the danger signs below appear."
+      }
+    ],
+    "see_doctor_when": [
+      "EMERGENCY: mouth, eye or genital sores, blisters or peeling skin, fever, or face/lip swelling",
+      "Any new rash after starting a medicine - tell the prescribing doctor soon"
+    ]
+  },
+  "Heat rash (miliaria)": {
+    "severity": 1,
+    "summary": "Tiny itchy or prickly bumps caused by blocked sweat glands in hot, humid weather, usually on covered or sweaty areas (neck, chest, back, skin folds). Very common in Indian summers and in babies.",
+    "contagious": "No.",
+    "soothing_care": [
+      {
+        "tip": "Cool the skin: shade, fan, cool showers.",
+        "caution": null
+      },
+      {
+        "tip": "Loose, light cotton clothes; avoid heavy creams and oils.",
+        "caution": null
+      },
+      {
+        "tip": "Calamine lotion for itch.",
+        "caution": null
+      }
+    ],
+    "see_doctor_when": [
+      "Pus, increasing pain or fever",
+      "No improvement after a few days in a cool environment"
+    ]
+  },
+  "Pityriasis alba": {
+    "severity": 1,
+    "summary": "Faint pale, slightly dry or flaky patches, usually on the face of children and teenagers, more noticeable after sun exposure. It is harmless and often linked to dry skin or mild eczema.",
+    "contagious": "No.",
+    "soothing_care": [
+      {
+        "tip": "Moisturise the face daily with a fragrance-free cream.",
+        "caution": null
+      },
+      {
+        "tip": "Use sunscreen so the surrounding skin doesn't tan and make patches stand out.",
+        "caution": null
+      }
+    ],
+    "see_doctor_when": [
+      "Patches are milk-white with no flaking (to rule out vitiligo)",
+      "A patch feels numb",
+      "It isn't improving after a few months"
+    ]
+  },
+  "Seborrheic dermatitis": {
+    "severity": 1,
+    "summary": "Greasy, yellowish or white flakes with mild redness on oily areas: scalp (dandruff), eyebrows, sides of the nose, behind the ears and the chest. It comes and goes.",
+    "contagious": "No.",
+    "soothing_care": [
+      {
+        "tip": "Anti-dandruff shampoo (ketoconazole, selenium sulfide or zinc) on the scalp - and briefly on affected face areas.",
+        "caution": "Avoid eyes; stop if it irritates."
+      },
+      {
+        "tip": "Gentle, fragrance-free face wash.",
+        "caution": null
+      }
+    ],
+    "see_doctor_when": [
+      "Not improving after 4 weeks",
+      "Widespread or very red and sore"
+    ]
+  },
+  "Hand-foot-mouth disease": {
+    "severity": 2,
+    "summary": "A common viral illness in young children: mouth ulcers plus small spots or blisters on the palms, soles and sometimes buttocks, often with mild fever.",
+    "contagious": "Yes - keep the child home until fever is gone and blisters have dried; wash hands often.",
+    "soothing_care": [
+      {
+        "tip": "Plenty of cool fluids; soft, bland food.",
+        "caution": null
+      }
+    ],
+    "see_doctor_when": [
+      "Child is not drinking or passing less urine",
+      "High fever lasting more than 3 days, unusual sleepiness, or a stiff neck"
+    ]
+  }
+}

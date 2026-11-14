@@ -27,3 +27,15 @@ export async function thumbnail(dataUrl: string, size = 256) {
   canvas.getContext("2d")!.drawImage(img, 0, 0, size, size);
   return canvas.toDataURL("image/jpeg", 0.7);
 }
+
+/** Photo with the heatmap PNG drawn on top (50% opacity), as a small JPEG for reports. */
+export async function heatmapOverlay(photoDataUrl: string, heatmapB64: string, size = 320) {
+  const [img, hm] = await Promise.all([load(photoDataUrl), load(`data:image/png;base64,${heatmapB64}`)]);
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = size;
+  const ctx = canvas.getContext("2d")!;
+  ctx.drawImage(img, 0, 0, size, size);
+  ctx.globalAlpha = 0.5;
+  ctx.drawImage(hm, 0, 0, size, size);
+  return canvas.toDataURL("image/jpeg", 0.8);
+}

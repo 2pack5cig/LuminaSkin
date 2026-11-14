@@ -1,0 +1,237 @@
+{
+  "classes": [
+    "Acne",
+    "Contact Dermatitis",
+    "Eczema",
+    "Folliculitis",
+    "Herpes Simplex",
+    "Herpes Zoster",
+    "Impetigo",
+    "Insect Bite",
+    "Pityriasis Rosea",
+    "Psoriasis",
+    "Scabies",
+    "Tinea",
+    "Tinea Versicolor",
+    "Urticaria",
+    "Vitiligo"
+  ],
+  "p_min": 0.41,
+  "min_skin": 0.1,
+  "ood_thr": 114.75411224365234,
+  "lr_C": 0.003,
+  "test_fused": {
+    "all": {
+      "n": 612,
+      "top1": 0.667,
+      "top3": 0.891,
+      "macro_recall": 0.639
+    },
+    "SCIN": {
+      "n": 307,
+      "top1": 0.58,
+      "top3": 0.873,
+      "macro_recall": 0.555
+    },
+    "DermaCon-IN (India)": {
+      "n": 305,
+      "top1": 0.754,
+      "top3": 0.908,
+      "macro_recall": 0.537
+    },
+    "FST I-III": {
+      "n": 301,
+      "top1": 0.638,
+      "top3": 0.894,
+      "macro_recall": 0.706
+    },
+    "FST IV": {
+      "n": 201,
+      "top1": 0.706,
+      "top3": 0.876,
+      "macro_recall": 0.508
+    },
+    "FST V": {
+      "n": 94,
+      "top1": 0.691,
+      "top3": 0.926,
+      "macro_recall": 0.552
+    },
+    "FST VI": {
+      "n": 8,
+      "top1": 0.625,
+      "top3": 0.875,
+      "macro_recall": 0.7
+    },
+    "FST IV-VI": {
+      "n": 303,
+      "top1": 0.7,
+      "top3": 0.891,
+      "macro_recall": 0.511
+    },
+    "Monk 4": {
+      "n": 7,
+      "top1": 0.857,
+      "top3": 0.857,
+      "macro_recall": 0.8
+    },
+    "Monk 5": {
+      "n": 66,
+      "top1": 0.803,
+      "top3": 0.879,
+      "macro_recall": 0.696
+    },
+    "Monk 6": {
+      "n": 123,
+      "top1": 0.764,
+      "top3": 0.919,
+      "macro_recall": 0.442
+    },
+    "Monk 7": {
+      "n": 89,
+      "top1": 0.719,
+      "top3": 0.921,
+      "macro_recall": 0.592
+    },
+    "Monk 8": {
+      "n": 20,
+      "top1": 0.65,
+      "top3": 0.9,
+      "macro_recall": 0.476
+    },
+    "Monk 9": null
+  },
+  "ablation_all": {
+    "fused": {
+      "n": 612,
+      "top1": 0.667,
+      "top3": 0.891,
+      "macro_recall": 0.639
+    },
+    "image_only": {
+      "n": 612,
+      "top1": 0.655,
+      "top3": 0.894,
+      "macro_recall": 0.607
+    },
+    "symptoms_only": {
+      "n": 612,
+      "top1": 0.181,
+      "top3": 0.381,
+      "macro_recall": 0.199
+    },
+    "derm_lr_only": {
+      "n": 612,
+      "top1": 0.627,
+      "top3": 0.876,
+      "macro_recall": 0.619
+    },
+    "effnet_only": {
+      "n": 612,
+      "top1": 0.529,
+      "top3": 0.791,
+      "macro_recall": 0.45
+    }
+  },
+  "per_class_recall": {
+    "Acne": [
+      0.938,
+      32
+    ],
+    "Contact Dermatitis": [
+      0.397,
+      78
+    ],
+    "Eczema": [
+      0.552,
+      116
+    ],
+    "Folliculitis": [
+      0.591,
+      22
+    ],
+    "Herpes Simplex": [
+      0.455,
+      11
+    ],
+    "Herpes Zoster": [
+      0.615,
+      13
+    ],
+    "Impetigo": [
+      0.6,
+      10
+    ],
+    "Insect Bite": [
+      0.421,
+      38
+    ],
+    "Pityriasis Rosea": [
+      0.571,
+      7
+    ],
+    "Psoriasis": [
+      0.462,
+      26
+    ],
+    "Scabies": [
+      0.731,
+      26
+    ],
+    "Tinea": [
+      0.876,
+      129
+    ],
+    "Tinea Versicolor": [
+      0.647,
+      17
+    ],
+    "Urticaria": [
+      0.756,
+      41
+    ],
+    "Vitiligo": [
+      0.978,
+      46
+    ]
+  },
+  "val_oof_fused": {
+    "n": 538,
+    "top1": 0.686,
+    "top3": 0.911,
+    "macro_recall": 0.596
+  },
+  "v1_vs_v3_same_SCIN_test": {
+    "n": 305,
+    "v1": {
+      "all": {
+        "n": 305,
+        "top1": 0.593,
+        "top3": 0.889,
+        "macro_recall": 0.597
+      },
+      "IV-VI": {
+        "n": 70,
+        "top1": 0.6,
+        "top3": 0.857,
+        "macro_recall": 0.54
+      }
+    },
+    "v3": {
+      "all": {
+        "n": 305,
+        "top1": 0.584,
+        "top3": 0.882,
+        "macro_recall": 0.598
+      },
+      "IV-VI": {
+        "n": 70,
+        "top1": 0.571,
+        "top3": 0.829,
+        "macro_recall": 0.457
+      },
+      "top1_incl_new_classes": 0.584
+    }
+  },
+  "note": "v3-final: retrained on 100% of data. Scores below are v3's held-out test results (no test data left)."
+}

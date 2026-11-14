@@ -1,21 +1,72 @@
 @import "tailwindcss";
 
+/* One design system with public/landing.html: paper, ink, one teal accent, serif display + mono labels. */
 :root {
-  --background: #f7f5f2;
-  --foreground: #1c1a17;
+  --background: #F3EFE6;   /* paper */
+  --surface: #FBF8F1;      /* card */
+  --foreground: #16130F;   /* ink */
+  --accent: #0B5F58;       /* the one accent */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-brand: #0f766e;
-  --color-brand-soft: #ccfbf1;
-  --font-sans: var(--font-geist-sans);
+  --color-surface: var(--surface);
+  --color-brand: var(--accent);
+  --color-brand-soft: color-mix(in srgb, var(--accent) 10%, var(--background));
+  --color-muted: color-mix(in srgb, var(--foreground) 70%, var(--background));
+  --color-rule: color-mix(in srgb, var(--foreground) 22%, var(--background));
+  --font-sans: var(--font-hanken), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", Menlo, monospace;
 }
 
+html { -webkit-text-size-adjust: 100%; }
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
   -webkit-tap-highlight-color: transparent;
+}
+/* matte paper grain, same as the landing page */
+body::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .05; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+header, main, footer { position: relative; z-index: 1; }
+:focus-visible { outline: 2px solid var(--foreground); outline-offset: 3px; }
+
+@layer components {
+  .wrap { @apply mx-auto w-full max-w-[1120px] px-5 sm:px-8 lg:px-12; }
+  .eyebrow { @apply font-mono text-[0.72rem] uppercase tracking-[0.08em] text-muted; }
+  .display {
+    font-family: var(--font-fraunces), Georgia, "Times New Roman", serif; font-weight: 500; letter-spacing: -0.028em; line-height: 1;
+    font-size: clamp(2.3rem, 5.2vw, 4.2rem); text-wrap: balance;
+  }
+  .display em, .title em { font-style: italic; font-weight: 400; color: var(--accent); }
+  .title { font-family: var(--font-fraunces), Georgia, "Times New Roman", serif; font-weight: 500; letter-spacing: -0.02em; line-height: 1.1; font-size: clamp(1.35rem, 2.2vw, 1.75rem); }
+  .lede { @apply text-[1.05rem] sm:text-[1.15rem] max-w-[34em]; }
+  .num { @apply font-mono text-[0.72rem] text-muted; }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2.5 rounded-[4px] border border-foreground px-5 py-3.5 font-semibold
+           text-[1rem] leading-none transition-colors active:translate-y-px disabled:opacity-50 cursor-pointer select-none;
+  }
+  .btn-ink { @apply bg-foreground text-background hover:bg-background hover:text-foreground; }
+  .btn-accent { @apply bg-brand border-brand text-background hover:bg-foreground hover:border-foreground; }
+  .btn-ghost { @apply bg-transparent text-foreground hover:bg-foreground hover:text-background; }
+  .btn-sm { @apply px-4 py-2.5 text-[0.94rem]; }
+  .text-link { @apply font-semibold border-b border-foreground pb-0.5 hover:border-b-2; }
+
+  .card { @apply rounded-[4px] border border-rule bg-surface; }
+  .rule-top { @apply border-t border-foreground; }
+  .chip {
+    @apply rounded-[2px] border border-rule bg-surface px-3 py-2 text-[0.94rem] leading-tight text-left
+           transition-colors hover:border-foreground;
+  }
+  .chip-on { @apply bg-foreground text-background border-foreground hover:border-foreground; }
+  .bar { @apply h-1.5 w-full bg-rule/50; }
+  .bar > span { @apply block h-full bg-brand; }
 }
