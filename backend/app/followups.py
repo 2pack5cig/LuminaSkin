@@ -85,9 +85,14 @@ BY_CLASS = {
 MAX_Q = 4
 
 
-def pick(top_labels: list, is_child: bool) -> list:
-    """2-4 questions for this scan: #1's questions first, then #2, #3. Child-only questions only for children."""
+def pick(top_labels: list, is_child: bool, sym: dict | None = None) -> list:
+    """2-4 questions for this scan: #1's questions first, then #2, #3. Child-only questions only for children.
+    Answers can force a question the AI's top 3 wouldn't trigger: blisters + fever always asks the chickenpox question
+    (chickenpox isn't one of the AI's conditions, so the AI's top 3 alone would never ask it)."""
+    sym = sym or {}
     out = []
+    if sym.get("textures_FLUID_FILLED") and sym.get("other_symptoms_FEVER"):
+        out.append("both_sides_spread")
     for rnd in range(3):  # take the best question of each top-3 condition, round-robin
         for lab in top_labels:
             qs = [q for q in BY_CLASS.get(lab, []) if is_child or not QUESTIONS[q].get("child_only")]

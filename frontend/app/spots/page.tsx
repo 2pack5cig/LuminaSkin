@@ -15,7 +15,8 @@ const COINS: [string, string][] = [
   ["1", "₹1 · new (2019 onwards) · 20 mm"], ["1_old", "₹1 · older (before 2011) · 25 mm"],
   ["2", "₹2 · new (2019 onwards) · 23 mm"], ["5", "₹5 · new (2019 onwards) · 25 mm"], ["10", "₹10 · 27 mm"],
 ];
-const coinLabel = (c: string) => COINS.find(([k]) => k === c)?.[1] ?? `${c} mm coin`;
+// a typed size is stored as e.g. "25mm" so it can never be mistaken for a preset coin key ("1", "2", "5", "10")
+const coinLabel = (c: string) => COINS.find(([k]) => k === c)?.[1] ?? `${c.replace(/mm$/, "")} mm coin`;
 const RED = "#8E2A2A";
 
 const VERDICT: Record<string, { title: string; tone: "warn" | "ok" | "info" }> = {
@@ -238,6 +239,8 @@ function NewSpot({ onCreate, onCancel }: { onCreate: (s: Spot) => void; onCancel
   const [loc, setLoc] = useState("arm");
   const [coin, setCoin] = useState("1");
   const [custom, setCustom] = useState("");
+  const [other, setOther] = useState(false);
+  const customOk = Number(custom) >= 10 && Number(custom) <= 40;
   return (
     <div className="grid gap-10 pt-10 md:grid-cols-[minmax(0,4fr)_minmax(0,5fr)] md:gap-14 md:pt-16">
       <section>
@@ -270,24 +273,26 @@ function NewSpot({ onCreate, onCancel }: { onCreate: (s: Spot) => void; onCancel
           <p className="num">04</p><p className="font-serif text-[1.15rem]">Which coin will you use every time?</p>
           <p className="text-sm text-muted">Coin sizes changed over the years: check the year on your coin. Use the same coin for every check.</p>
           <div className="mt-2 flex flex-wrap gap-2">
-            {COINS.map(([k, l]) => <button key={k} onClick={() => setCoin(k)} className={`chip ${coin === k ? "chip-on" : ""}`}>{l}</button>)}
-            <button onClick={() => setCoin(custom || "other")} className={`chip ${!COINS.some(([k]) => k === coin) ? "chip-on" : ""}`}>Other coin</button>
+            {COINS.map(([k, l]) => <button key={k} onClick={() => { setCoin(k); setOther(false); }} className={`chip ${!other && coin === k ? "chip-on" : ""}`}>{l}</button>)}
+            <button onClick={() => setOther(true)} className={`chip ${other ? "chip-on" : ""}`}>Other coin (type its size)</button>
           </div>
-          {!COINS.some(([k]) => k === coin) && (
+          {other && (
             <label className="mt-3 flex items-center gap-3 text-[0.95rem]">
               Diameter
               <input inputMode="decimal" value={custom} placeholder="e.g. 25"
-                onChange={(e) => { const v = e.target.value.replace(/[^0-9.]/g, ""); setCustom(v); setCoin(v || "other"); }}
+                onChange={(e) => setCustom(e.target.value.replace(/[^0-9.]/g, ""))}
                 className="w-24 rounded-[2px] border border-rule bg-surface px-3 py-2 outline-none focus:border-foreground" /> mm
               <span className="text-sm text-muted">(measure it once with a ruler)</span>
             </label>
           )}
+          {other && custom !== "" && !customOk && <p className="mt-2 text-sm" style={{ color: RED }}>Enter a size between 10 and 40 mm.</p>}
         </div>
         <div className="mt-6 flex flex-col-reverse gap-3 md:flex-row md:items-center md:justify-between">
           <button onClick={onCancel} className="text-sm text-muted underline underline-offset-4">Cancel</button>
-          <button className="btn btn-accent md:min-w-[220px]" disabled={coin === "other" || (!COINS.some(([k]) => k === coin) && !(Number(coin) >= 10 && Number(coin) <= 40))} onClick={() => {
+          <button className="btn btn-accent md:min-w-[220px]" disabled={other && !customOk} onClick={() => {
             const now = new Date().toISOString();
-            onCreate({ id: newId(), name: name.trim() || (kind === "spot" ? "My spot" : "My rash"), kind, location: loc, coin, created: now, nextDue: now, checks: [] });
+            onCreate({ id: newId(), name: name.trim() || (kind === "spot" ? "My spot" : "My rash"), kind, location: loc,
+                       coin: other ? `${Number(custom)}mm` : coin, created: now, nextDue: now, checks: [] });
           }}>Continue to photo <span className="font-mono font-normal">→</span></button>
         </div>
       </section>

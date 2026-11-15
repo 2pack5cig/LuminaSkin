@@ -49,3 +49,6 @@ ml/data/negatives/*
 
 # generated PDFs stay local (not on GitHub)
 docs/*.pdf
+
+# pitch deck, demo photos and script stay local
+pitch/

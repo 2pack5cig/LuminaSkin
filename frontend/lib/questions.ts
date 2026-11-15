@@ -102,3 +102,7 @@ export function labelFor(key: string) {
 
 /** Pairs where choosing one un-chooses the other. */
 export const EXCLUSIVE: Record<string, string> = { household_itchy: "lives_alone", lives_alone: "household_itchy" };
+
+/** Display name for an AI label: adds the everyday name in brackets (labels stay unchanged as keys). */
+const EVERYDAY: Record<string, string> = { Urticaria: "Urticaria (hives)" };
+export const nice = (label?: string) => (label ? EVERYDAY[label] ?? label : "");

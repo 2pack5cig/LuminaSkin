@@ -1,6 +1,7 @@
 import { jsPDF } from "jspdf";
 import type { Ranked, Scan, Shot } from "./types";
 import { DURATIONS, GROUPS } from "./questions";
+import { nice } from "./questions";
 
 // Palette shared with the website
 const INK: [number, number, number] = [22, 19, 15];
@@ -132,7 +133,7 @@ export function doctorPdf(scan: Scan) {
     y += 2; doc.setDrawColor(...RULE); doc.line(M, y, W - M, y); y += 4.5;
     ((r.display ?? r.top3) as Ranked[]).forEach((t, i) => {
       ensure(10);
-      font(9.5, i === 0 ? "bold" : "normal"); doc.text(String(i + 1), cols[0], y); doc.text(t.label, cols[1], y);
+      font(9.5, i === 0 ? "bold" : "normal"); doc.text(String(i + 1), cols[0], y); doc.text(nice(t.label), cols[1], y);
       doc.text(pct(t.prob), cols[2], y);
       font(8.5, "normal", MUTED);
       doc.text(t.members ? "grouped: eczema family" : i === 0 ? (r.uncertain ? "below confidence threshold" : "top suggestion") : "", cols[3], y);
@@ -141,7 +142,7 @@ export function doctorPdf(scan: Scan) {
       doc.setFillColor(...ACCENT); doc.rect(cols[2] + 13, y - 2.6, Math.max(0.3, 12 * t.prob), 2.2, "F");
       y += 5;
       (t.members ?? []).forEach((m) => {
-        font(8.5, "normal", MUTED); doc.text(`- ${m.label}`, cols[1] + 3, y); doc.text(pct(m.prob), cols[2], y); y += 4.3;
+        font(8.5, "normal", MUTED); doc.text(`- ${nice(m.label)}`, cols[1] + 3, y); doc.text(pct(m.prob), cols[2], y); y += 4.3;
       });
     });
     y += 1;
@@ -181,7 +182,7 @@ export function doctorPdf(scan: Scan) {
   const flags: [string, string][] = [];
   (r.alerts ?? []).forEach((al) => flags.push([al.title, al.text]));
   if (r.scabies) flags.push(["Scabies screen (clinical criteria)", r.scabies.positive ? `POSITIVE: ${r.scabies.reasons.join(", ")}.` : "Negative."]);
-  (r.hints?.fits ?? []).forEach((f) => flags.push([`Answers support: ${f.label}`, f.reasons.join(", ")]));
+  (r.hints?.fits ?? []).forEach((f) => flags.push([`Answers support: ${nice(f.label)}`, f.reasons.join(", ")]));
   (r.hints?.also_consider ?? []).forEach((c) => flags.push([`Also consider: ${c.name}`, `${c.covered_by_ai ? "Ranked low by the AI" : "Not assessed by the AI"}; patient reported ${c.reasons.join(", ")}.`]));
   (r.hints?.alerts ?? []).forEach((t) => flags.push(["Follow-up alert", t]));
   if (flags.length) {

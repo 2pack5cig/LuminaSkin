@@ -55,21 +55,35 @@ export function CropView({ src, onDone, onCancel }: { src: string; onDone: (p: {
 }
 
 export function PickButtons({ onPick }: { onPick: (src: string) => void }) {
-  const pick = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0];
-    if (f) onPick(URL.createObjectURL(f));
-    e.target.value = "";
+  const [over, setOver] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  const takeFile = (f?: File | null) => {
+    if (!f) return;
+    if (!f.type.startsWith("image/")) { setErr("That isn't a photo. Drop a JPG or PNG image."); return; }
+    setErr(null); onPick(URL.createObjectURL(f));
   };
+  const pick = (e: React.ChangeEvent<HTMLInputElement>) => { takeFile(e.target.files?.[0]); e.target.value = ""; };
   return (
-    <div className="grid grid-cols-2 gap-3">
-      <label className="btn btn-ink">
-        Take photo
-        <input type="file" accept="image/*" capture="environment" className="hidden" onChange={pick} />
-      </label>
-      <label className="btn btn-ghost">
-        From gallery
-        <input type="file" accept="image/*" className="hidden" onChange={pick} />
-      </label>
+    <div
+      onDragOver={(e) => { e.preventDefault(); setOver(true); }}
+      onDragLeave={() => setOver(false)}
+      onDrop={(e) => { e.preventDefault(); setOver(false); takeFile(e.dataTransfer.files?.[0]); }}
+      className={`space-y-3 rounded-[4px] transition-colors ${over ? "bg-[#0B5F58]/10 outline-2 outline-dashed outline-offset-4 outline-[#0B5F58]" : ""}`}
+    >
+      <div className="grid grid-cols-2 gap-3">
+        <label className="btn btn-ink">
+          Take photo
+          <input type="file" accept="image/*" capture="environment" className="hidden" onChange={pick} />
+        </label>
+        <label className="btn btn-ghost">
+          From gallery
+          <input type="file" accept="image/*" className="hidden" onChange={pick} />
+        </label>
+      </div>
+      <p className="hidden rounded-[4px] border border-dashed border-rule py-4 text-center text-sm text-muted md:block">
+        {over ? "Drop the photo here" : "or drag and drop a photo here"}
+      </p>
+      {err && <p className="text-sm text-red-700">{err}</p>}
     </div>
   );
 }

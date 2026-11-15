@@ -17,7 +17,7 @@ def coin_mm(value: str) -> float:
     if value in COINS_MM:
         return COINS_MM[value]
     try:
-        v = float(value)
+        v = float(str(value).strip().removesuffix("mm"))   # typed sizes arrive as e.g. "25mm"
         return v if 10 <= v <= 40 else 23.0
     except ValueError:
         return 23.0
@@ -139,34 +139,43 @@ def segment(bgr, tap_xy, coin=None):
 
 
 def colour_count(bgr, mask):
-    """Number of distinct colour groups inside the spot (k-means 4 in Lab, groups >=8% that differ by dE >= 12)."""
-    lab = cv2.cvtColor(bgr, cv2.COLOR_BGR2LAB).astype(np.float32)[mask > 0]
+    """Number of clearly different colours inside the spot.
+    The outer rim is ignored (where the spot fades into skin, those in-between shades aren't real colours), the image is
+    lightly smoothed (skin texture / JPEG noise), and colour groups must cover >=10% and differ by dE >= 20 (clearly
+    different to the eye, e.g. brown vs black vs blue-grey/red)."""
+    r = max(1, int(round(0.18 * np.sqrt(mask.sum() / np.pi))))
+    core = cv2.erode(mask, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * r + 1, 2 * r + 1)))
+    if core.sum() < 40:
+        core = mask
+    lab = cv2.cvtColor(cv2.GaussianBlur(bgr, (0, 0), 1.5), cv2.COLOR_BGR2LAB).astype(np.float32)[core > 0]
     if len(lab) < 40:
         return 1
     _, lbl, ctr = cv2.kmeans(lab, 4, None, (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 20, 0.5), 3,
                              cv2.KMEANS_PP_CENTERS)
     share = np.bincount(lbl.ravel(), minlength=4) / len(lbl)
-    keep = [ctr[i] for i in range(4) if share[i] >= 0.08]
+    order = np.argsort(-share)
     groups = []
-    for c in keep:
-        if all(np.linalg.norm(c - g) >= 12 for g in groups):
-            groups.append(c)
+    for i in order:
+        if share[i] >= 0.10 and all(np.linalg.norm(ctr[i] - g) >= 20 for g in groups):
+            groups.append(ctr[i])
     return max(1, len(groups))
 
 
 def asymmetry(mask):
-    """Mismatch when the shape is flipped across its two main axes (0 = perfectly symmetric)."""
+    """Mismatch when the filled shape is flipped across its two main axes (0 = perfectly symmetric).
+    The outline is redrawn as a filled shape on a fixed 201x201 grid, so tiny spots aren't penalised for having few pixels."""
+    cs, _ = cv2.findContours(mask.astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    if not cs:
+        return 0.0
+    c = max(cs, key=cv2.contourArea).reshape(-1, 2).astype(np.float32)
     ys, xs = np.nonzero(mask)
     pts = np.c_[xs, ys].astype(np.float32)
     mean = pts.mean(0)
     _, _, vt = np.linalg.svd(pts - mean, full_matrices=False)
-    rot = (pts - mean) @ vt.T
+    rot = (c - mean) @ vt.T
     s = max(np.abs(rot).max(), 1)
-    size = 201
-    grid = np.zeros((size, size), np.uint8)
-    q = np.clip(((rot / s) * 100 + 100).round().astype(int), 0, size - 1)
-    grid[q[:, 1], q[:, 0]] = 1
-    grid = cv2.morphologyEx(grid, cv2.MORPH_CLOSE, np.ones((5, 5), np.uint8))
+    grid = np.zeros((201, 201), np.uint8)
+    cv2.fillPoly(grid, [np.clip((rot / s) * 100 + 100, 0, 200).round().astype(np.int32)], 1)
     a = grid.sum()
     return float(max((grid ^ grid[:, ::-1]).sum(), (grid ^ grid[::-1, :]).sum()) / (2 * a)) if a else 0.0
 
@@ -201,6 +210,7 @@ def measure(bgr, tap_xy, coin_mm, coin_px=None):
         "eq_diameter_mm": round(eq_diam_px * mm_per_px, 1) if coin else None,
         "area_pct_of_photo": round(100 * area_px / (h * w), 2),
         "colours": colour_count(bgr, mask),
+        "px_diameter": round(float(eq_diam_px), 1),   # spot size in photo pixels (too few -> shape/colour can't be judged)
         "irregularity": round(perim ** 2 / (4 * np.pi * area_px), 2),   # 1.0 = perfect circle
         "asymmetry": round(asymmetry(mask), 2),
         "lightness_vs_skin": round(dL, 1),                              # <0 darker than skin, >0 lighter
@@ -242,13 +252,14 @@ def compare(kind: str, location: str, prev: dict, now: dict, similarity):
         grew = (dd is not None and (dd >= 1.0 or (da >= 0.20 and dd >= 0.7))) or (dd is None and da >= 0.30)
         if grew:
             out["alerts"].append("The spot has grown since last time.")
-        if now["colours"] > prev["colours"]:
+        shape_ok = min(now.get("px_diameter", 999), prev.get("px_diameter", 999)) >= SMALL_PX  # tiny in photo -> noisy
+        if shape_ok and now["colours"] > prev["colours"]:
             out["alerts"].append("New colour shades have appeared in the spot.")
-        if now["irregularity"] > prev["irregularity"] * 1.15 or now["asymmetry"] > prev["asymmetry"] + 0.10:
+        if shape_ok and (now["irregularity"] > prev["irregularity"] * 1.15 or now["asymmetry"] > prev["asymmetry"] + 0.10):
             out["alerts"].append("The outline has become more uneven or less symmetric.")
         if both_scaled and now["eq_diameter_mm"] > 6 and prev["eq_diameter_mm"] <= 6:
             out["alerts"].append("The spot is now larger than 6 mm.")
-        if location in ("palm", "sole", "nail") and (grew or now["colours"] > prev["colours"]):
+        if location in ("palm", "sole", "nail") and (grew or (shape_ok and now["colours"] > prev["colours"])):
             out["alerts"].append("A changing dark spot on the palm, sole or nail should always be checked by a doctor.")
         if out["alerts"]:
             out["verdict"] = "changed_see_doctor"
@@ -298,7 +309,8 @@ def overlay_png(bgr, m):
 # smaller (2-22% under 6 mm in studies); Evolving: changing size/shape/colour, a spot that looks unlike the others
 # ("ugly duckling"), bleeding, crusting, itching, or a sore that doesn't heal. Evolution is the strongest sign.
 # Phone measurements of border/asymmetry are noisy, so only CLEAR values count. Not a cancer test.
-A_THR, B_THR, C_THR, D_MM = 0.35, 1.6, 3, 6.0
+A_THR, B_THR, C_THR, D_MM = 0.25, 1.6, 3, 6.0  # A: circle/oval ~0.02, teardrop ~0.28, two-lobed ~0.38
+SMALL_PX = 30   # spot narrower than this (in photo pixels) -> shape/colour not judged
 
 
 def concern(location: str, now: dict, prev: dict | None = None, symptoms: dict | None = None) -> dict:
@@ -308,15 +320,19 @@ def concern(location: str, now: dict, prev: dict | None = None, symptoms: dict |
     acral = location in ("palm", "sole", "nail")
     d = now.get("eq_diameter_mm")
     d_long = now.get("diameter_mm")
-    A = now["asymmetry"] >= A_THR
-    B = now["irregularity"] >= B_THR
-    C = now["colours"] >= C_THR
+    # a spot only a few dozen pixels wide can't show its shape or colours reliably -> don't judge A/B/C from it
+    small = now.get("px_diameter", 999) < SMALL_PX
+    A = not small and now["asymmetry"] >= A_THR
+    B = not small and now["irregularity"] >= B_THR
+    C = not small and now["colours"] >= C_THR
+    TOO_SMALL = "too small in this photo to judge: take a closer photo"
     D = (d_long or d or 0) > D_MM if (d_long or d) is not None else False
     abcd = sum([A, B, C, D])
     checklist = [
-        {"letter": "A", "label": "Asymmetry", "warn": A, "detail": "halves don't match" if A else "roughly symmetric"},
-        {"letter": "B", "label": "Border", "warn": B, "detail": "uneven or jagged edge" if B else "fairly smooth edge"},
-        {"letter": "C", "label": "Colour", "warn": C, "detail": f"{now['colours']} different shades" if C else f"{now['colours']} shade{'s' if now['colours'] > 1 else ''}"},
+        {"letter": "A", "label": "Asymmetry", "warn": A, "detail": TOO_SMALL if small else "halves don't match" if A else "roughly symmetric"},
+        {"letter": "B", "label": "Border", "warn": B, "detail": TOO_SMALL if small else "uneven or jagged edge" if B else "fairly smooth edge"},
+        {"letter": "C", "label": "Colour", "warn": C, "detail": TOO_SMALL if small else f"{now['colours']} clearly different colours" if C
+         else ("one even colour" if now["colours"] == 1 else f"{now['colours']} shades")},
         {"letter": "D", "label": "Diameter",
          "warn": D, "detail": (f"{d_long or d} mm across (over 6 mm)" if D else f"{d_long or d} mm across (melanomas can still be smaller)")
          if (d_long or d) is not None else "no coin, size unknown"},
@@ -343,10 +359,11 @@ def concern(location: str, now: dict, prev: dict | None = None, symptoms: dict |
                 why.append(f"may have grown {dd:+.1f} mm (recheck)")
         elif (now["area_pct_of_photo"] - prev["area_pct_of_photo"]) / max(prev["area_pct_of_photo"], 1e-6) >= 0.3:
             e_change = True; pts += 30; e_items.append("looks bigger (no coin)"); why.append("looks bigger than last time (no coin, approximate)")
-        new_c = now["colours"] - prev["colours"]
+        shape_ok = not small and prev.get("px_diameter", 999) >= SMALL_PX
+        new_c = now["colours"] - prev["colours"] if shape_ok else 0
         if new_c > 0:
             e_change = True; pts += 25; e_items.append(f"{new_c} new colour{'s' if new_c > 1 else ''}"); why.append(f"{new_c} new colour{'s' if new_c > 1 else ''}")
-        if now["irregularity"] > prev["irregularity"] * 1.15 or now["asymmetry"] > prev["asymmetry"] + 0.10:
+        if shape_ok and (now["irregularity"] > prev["irregularity"] * 1.15 or now["asymmetry"] > prev["asymmetry"] + 0.10):
             e_change = True; pts += 15; e_items.append("shape/border changed"); why.append("outline became more uneven or less symmetric")
     bleed = bool(sym.get("bleeds"))          # bleeds, crusts, or a sore that doesn't heal
     itch = bool(sym.get("itches"))

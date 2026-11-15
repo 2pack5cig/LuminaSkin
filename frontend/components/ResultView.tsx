@@ -1,5 +1,6 @@
 "use client";
 import type { AlsoConsider, AnalyzeResult, Care, MedicineWarning, Ranked } from "@/lib/types";
+import { nice } from "@/lib/questions";
 
 const OOD_MSG: Record<string, string> = {
   NOT_SKIN: "We couldn't find skin in this photo. Retake it with the rash filling the square.",
@@ -115,7 +116,7 @@ export default function ResultView({ r, photo, actions, meta }:
   const headline = !r.quality.ok ? <>Let&apos;s <em>retake</em> the photo.</>
     : r.ood.rejected ? <>We can&apos;t <em>assess</em> this photo.</>
     : r.uncertain ? <>Not confident. <em>See a doctor.</em></>
-    : <>Most likely <em>{ranked[0]?.label}.</em></>;
+    : <>Most likely <em>{nice(ranked[0]?.label)}.</em></>;
 
   return (
     <div className="grid gap-10 pt-10 md:grid-cols-[minmax(0,4fr)_minmax(0,5fr)] md:gap-14 md:pt-16">
@@ -196,14 +197,14 @@ export default function ResultView({ r, photo, actions, meta }:
               <div key={t.label} className="border-b border-rule py-4">
                 <div className="grid grid-cols-[34px_1fr_auto] items-baseline gap-2">
                   <span className="num">{String(i + 1).padStart(2, "0")}</span>
-                  <span className={`font-serif text-[1.2rem] leading-tight ${i === 0 ? "font-semibold" : ""}`}>{t.label}</span>
+                  <span className={`font-serif text-[1.2rem] leading-tight ${i === 0 ? "font-semibold" : ""}`}>{nice(t.label)}</span>
                   <span className="font-mono text-[0.95rem]">{pct(t.prob)}</span>
                 </div>
                 <div className="bar mt-2 ml-[34px] w-[calc(100%-34px)]"><span style={{ width: `${Math.max(1, t.prob * 100)}%`, opacity: 1 - i * 0.25 }} /></div>
                 {t.members && (
                   <div className="ml-[34px] mt-2 space-y-0.5">
                     {t.members.map((m) => (
-                      <div key={m.label} className="flex justify-between text-sm text-muted"><span>— {m.label}</span><span className="font-mono">{pct(m.prob)}</span></div>
+                      <div key={m.label} className="flex justify-between text-sm text-muted"><span>— {nice(m.label)}</span><span className="font-mono">{pct(m.prob)}</span></div>
                     ))}
                   </div>
                 )}
@@ -227,7 +228,7 @@ export default function ResultView({ r, photo, actions, meta }:
               <ul className="mt-2 divide-y divide-rule">
                 {ranked.map((t) => (
                   <li key={t.label} className="flex justify-between py-2 text-[0.95rem]">
-                    <span>{t.label}{t.members ? ` (${t.members.map((m) => m.label).join(" / ")})` : ""}</span>
+                    <span>{nice(t.label)}{t.members ? ` (${t.members.map((m) => nice(m.label)).join(" / ")})` : ""}</span>
                     <span className="font-mono">{pct(t.prob)}</span>
                   </li>
                 ))}
@@ -240,7 +241,7 @@ export default function ResultView({ r, photo, actions, meta }:
         {r.hints && (r.hints.fits.length > 0 || r.hints.also_consider.length > 0) && (
           <Block label="Hints from your answers">
             {r.hints.fits.map((f) => (
-              <p key={f.label} className="py-1"><b>Your answers fit {f.label}</b>, {r.uncertain ? "one of the AI's low-confidence guesses" : "one of the possibilities above"} <span className="text-muted">({f.reasons.join(", ")})</span>.</p>
+              <p key={f.label} className="py-1"><b>Your answers fit {nice(f.label)}</b>, {r.uncertain ? "one of the AI's low-confidence guesses" : "one of the possibilities above"} <span className="text-muted">({f.reasons.join(", ")})</span>.</p>
             ))}
             {r.hints.also_consider.map((a) => <AlsoCard key={a.name} a={a} />)}
             <p className="num mt-3">{r.hints.note.toUpperCase()}</p>
@@ -251,7 +252,7 @@ export default function ResultView({ r, photo, actions, meta }:
 
         {r.triage && (
           <>
-            <Block label={`About ${ranked[0]?.label ?? "this condition"}`}>
+            <Block label={`About ${nice(ranked[0]?.label) || "this condition"}`}>
               <p className="text-[1.02rem]">{r.triage.summary}</p>
               {r.triage.contagious && <p className="mt-2"><b>Contagious:</b> {r.triage.contagious}</p>}
             </Block>

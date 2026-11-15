@@ -100,6 +100,8 @@ async def analyze(images: list[UploadFile] = File(...), symptoms: str = Form("{}
         scab["prominent"] = True
         return {**base, **pred, "display": None, "triage": None}
     display, triage = group_dermatitis(pred["top3"])
+    if triage is not None and not display[0].get("members"):
+        triage = None  # eczema family isn't #1: the info card must describe the #1 condition, not eczema
     if PIPE and display[0].get("members"):  # confident about the eczema family as a whole?
         pred["uncertain"] = display[0]["prob"] < PIPE.p_min
     # AI confident about something else -> smaller "also consider" note; otherwise full card
@@ -116,7 +118,7 @@ async def analyze(images: list[UploadFile] = File(...), symptoms: str = Form("{}
         for a in alerts:
             if a["kind"] == "steroid":
                 a["text"] += " Because steroid cream was used, the AI's result for these look-alike conditions is less reliable."
-    base["followups"] = followups.pick(labels, bool(sym.get("is_child")))
+    base["followups"] = followups.pick(labels, bool(sym.get("is_child")), sym)
     base["medicine_warning"] = medicines.warning(labels, sym)   # fixed rule, not AI
     if pred["uncertain"]:   # no condition-specific reasons when the AI isn't confident (they'd read like a diagnosis)
         base["medicine_warning"]["reasons"] = []

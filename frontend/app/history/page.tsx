@@ -4,6 +4,7 @@ import Link from "next/link";
 import { deleteScan, listScans } from "@/lib/storage";
 import { doctorPdf } from "@/lib/pdf";
 import type { Scan } from "@/lib/types";
+import { nice } from "@/lib/questions";
 
 const pct = (p: number) => (p < 0.01 ? "<1%" : `${Math.round(p * 100)}%`);
 const trend = (now: number, before?: number) =>
@@ -50,7 +51,7 @@ export default function History() {
                 <p className="num">{new Date(s.date).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }).toUpperCase()}
                   {" · "}{new Date(s.date).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}</p>
                 <p className="mt-1 font-serif text-[1.35rem] leading-tight">
-                  {s.result.uncertain ? "Not confident" : top ? top.label : "No result"}
+                  {s.result.uncertain ? "Not confident" : top ? nice(top.label) : "No result"}
                   {top && !s.result.uncertain && <span className="ml-2 font-mono text-[0.9rem] text-muted">{pct(top.prob)}</span>}
                 </p>
                 <p className="mt-1 text-[0.95rem] text-muted">
