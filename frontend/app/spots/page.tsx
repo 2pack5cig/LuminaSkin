@@ -47,10 +47,21 @@ function ConcernBar({ c }: { c: SpotConcern }) {
         <span className="absolute top-0 left-0 h-full" style={{ width: `${Math.max(2, c.score)}%`, background: color }} />
       </div>
       <div className="mt-1 flex justify-between font-mono text-[0.68rem] uppercase tracking-[0.06em] text-muted"><span>Low</span><span>Medium</span><span>High</span></div>
-      {c.reasons.length > 0
+      {c.checklist && (
+        <ul className="mt-4 divide-y divide-rule border-y border-rule">
+          {c.checklist.map((x) => (
+            <li key={x.letter} className="grid grid-cols-[24px_1fr_auto] items-baseline gap-2 py-1.5 text-[0.93rem]">
+              <span className="font-serif text-[1.1rem]" style={{ color: x.warn ? RED : undefined }}>{x.letter}</span>
+              <span><span className="text-muted">{x.label} · </span>{x.detail}</span>
+              <span className="font-mono text-[0.72rem]" style={{ color: x.warn ? RED : "#0B5F58" }}>{x.warn ? "SIGN" : "OK"}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+      {!c.checklist && (c.reasons.length > 0
         ? <ul className="mt-3 space-y-1 text-[0.95rem]">{c.reasons.map((r) => <li key={r}>— {r}</li>)}</ul>
-        : <p className="mt-3 text-[0.95rem] text-muted">No warning signs measured.</p>}
-      <p className="mt-2 text-sm text-muted">{c.note} See a doctor anytime a spot bleeds, itches, or worries you.</p>
+        : <p className="mt-3 text-[0.95rem] text-muted">No warning signs measured.</p>)}
+      <p className="mt-2 text-sm text-muted">{c.note}</p>
     </section>
   );
 }
@@ -100,14 +111,15 @@ function CheckFlow({ spot, onSaved, onCancel }: { spot: Spot; onSaved: (s: Spot)
   const [res, setRes] = useState<MeasureResponse | null>(null);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [sym, setSym] = useState<Record<string, boolean>>({});
 
-  const run = async (t: { x: number; y: number }, edges?: number[]) => {
+  const run = async (t: { x: number; y: number }, edges?: number[], symptoms = sym) => {
     if (!photo) return;
     setBusy(true); setErr(null);
     try {
       const r = await measureSpot(photo.blob, t, {
         coin: spot.coin, kind: spot.kind, location: spot.location, coinEdges: edges,
-        prev: prev ? { metrics: prev.metrics, embedding: prev.embedding } : null,
+        prev: prev ? { metrics: prev.metrics, embedding: prev.embedding } : null, symptoms,
       });
       if (!r.ok) setErr("Couldn't find a spot where you tapped. Tap right on the spot.");
       setRes(r.ok ? r : null);
@@ -191,6 +203,18 @@ function CheckFlow({ spot, onSaved, onCancel }: { spot: Spot; onSaved: (s: Spot)
                     Coin not found, so sizes are approximate. <button className="underline" onClick={() => { setMode("coin"); setCoinTaps([]); }}>Tap the coin edges</button> or retake with the coin fully visible.
                   </p>
                 )}
+              </div>
+            )}
+            {spot.kind === "spot" && (
+              <div className="card p-5">
+                <p className="eyebrow">Anything a photo can&apos;t show? (tap all that apply)</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {([["bleeds", "Bleeds, crusts or doesn't heal"], ["itches", "Itchy or painful"],
+                     ["ugly_duckling", "Looks different from my other moles"]] as const).map(([k, l]) => (
+                    <button key={k} className={`chip ${sym[k] ? "chip-on" : ""}`}
+                      onClick={() => { const n = { ...sym, [k]: !sym[k] }; setSym(n); if (tap) run(tap, coinTaps.length === 4 ? coinTaps : undefined, n); }}>{l}</button>
+                  ))}
+                </div>
               </div>
             )}
             {res?.concern && <ConcernBar c={res.concern} />}

@@ -165,7 +165,7 @@ def group_dermatitis(top3):
 @app.post("/spot/measure")
 async def spot_measure(image: UploadFile = File(...), tap_x: float = Form(...), tap_y: float = Form(...),
                        coin: str = Form("2"), coin_edges: str = Form(""), kind: str = Form("spot"),
-                       location: str = Form("other"), prev: str = Form("")):
+                       location: str = Form("other"), prev: str = Form(""), symptoms: str = Form("{}")):
     """Measure the tapped spot (coin for scale) and, if `prev` is given, compare with the previous check.
     tap_x/tap_y and coin_edges are fractions of the image (0-1). Not a diagnosis."""
     bgr = quality.decode(await image.read())
@@ -194,7 +194,7 @@ async def spot_measure(image: UploadFile = File(...), tap_x: float = Form(...), 
            "concern": None}
     p = json.loads(prev) if prev else {}
     if kind == "spot":
-        out["concern"] = spot.concern(location, m, p.get("metrics"))
+        out["concern"] = spot.concern(location, m, p.get("metrics"), json.loads(symptoms or "{}"))
     if prev:
         sim = None
         if emb_b64 and p.get("embedding"):

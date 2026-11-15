@@ -79,7 +79,10 @@ export type SpotComparison = {
   changes: { what: string; before: string; now: string; delta: string }[];
   alerts: string[]; similarity: number | null;
 };
-export type SpotConcern = { score: number; level: "low" | "medium" | "high"; reasons: string[]; note: string };
+export type SpotConcern = {
+  score: number; level: "low" | "medium" | "high"; reasons: string[]; note: string;
+  checklist?: { letter: string; label: string; warn: boolean; detail: string }[];
+};
 export type SpotCheck = {
   date: string; overlay: string; photo: string; metrics: SpotMetrics; embedding: string | null; comparison: SpotComparison | null;
   concern?: SpotConcern | null;

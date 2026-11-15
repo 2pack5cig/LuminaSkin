@@ -39,6 +39,7 @@ export type MeasureResponse = {
 /** Measure a tracked spot (tap = fractions 0-1 of the image). prev = previous check for comparison. */
 export async function measureSpot(image: Blob, tap: { x: number; y: number }, opts: {
   coin: string; kind: string; location: string; coinEdges?: number[]; prev?: { metrics: unknown; embedding: string | null } | null;
+  symptoms?: Record<string, boolean>;
 }): Promise<MeasureResponse> {
   const fd = new FormData();
   fd.append("image", image, "spot.jpg");
@@ -46,6 +47,7 @@ export async function measureSpot(image: Blob, tap: { x: number; y: number }, op
   fd.append("coin", opts.coin); fd.append("kind", opts.kind); fd.append("location", opts.location);
   if (opts.coinEdges) fd.append("coin_edges", opts.coinEdges.join(","));
   if (opts.prev) fd.append("prev", JSON.stringify(opts.prev));
+  fd.append("symptoms", JSON.stringify(opts.symptoms ?? {}));
   const res = await fetch("/api/spot/measure", { method: "POST", body: fd });
   if (!res.ok) throw new Error(`Server error ${res.status}`);
   return res.json();

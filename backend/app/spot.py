@@ -293,55 +293,80 @@ def overlay_png(bgr, m):
 
 
 # ---------------------------------------------------------------- concern bar (moles / spots only)
-def concern(location: str, now: dict, prev: dict | None = None) -> dict:
-    """Transparent 0-100 'get it checked' score from warning signs (ABCDE-style), NOT a cancer probability.
-    Evolution (change between checks) weighs most, as in clinical practice."""
+# Clinical basis: AAD "ABCDEs of melanoma": Asymmetry (halves don't match); Border jagged/scalloped/ill-defined;
+# Colour uneven (tan, brown, black, or patches of white, red, blue); Diameter usually > 6 mm, but melanomas can be
+# smaller (2-22% under 6 mm in studies); Evolving: changing size/shape/colour, a spot that looks unlike the others
+# ("ugly duckling"), bleeding, crusting, itching, or a sore that doesn't heal. Evolution is the strongest sign.
+# Phone measurements of border/asymmetry are noisy, so only CLEAR values count. Not a cancer test.
+A_THR, B_THR, C_THR, D_MM = 0.35, 1.6, 3, 6.0
+
+
+def concern(location: str, now: dict, prev: dict | None = None, symptoms: dict | None = None) -> dict:
     if not now.get("ok"):
         return None
-    pts, why = 0, []
+    sym = symptoms or {}
     acral = location in ("palm", "sole", "nail")
     d = now.get("eq_diameter_mm")
-    # --- how it looks today ---
-    if d is not None and d > 6:
-        pts += 15; why.append(f"larger than 6 mm ({d} mm)")
-    if now["colours"] >= 3:
-        pts += 15; why.append(f"{now['colours']} different colours")
-    if now["irregularity"] >= 1.6:
-        pts += 10; why.append("uneven outline")
-    if now["asymmetry"] >= 0.3:
-        pts += 10; why.append("asymmetric shape")
+    d_long = now.get("diameter_mm")
+    A = now["asymmetry"] >= A_THR
+    B = now["irregularity"] >= B_THR
+    C = now["colours"] >= C_THR
+    D = (d_long or d or 0) > D_MM if (d_long or d) is not None else False
+    abcd = sum([A, B, C, D])
+    checklist = [
+        {"letter": "A", "label": "Asymmetry", "warn": A, "detail": "halves don't match" if A else "roughly symmetric"},
+        {"letter": "B", "label": "Border", "warn": B, "detail": "uneven or jagged edge" if B else "fairly smooth edge"},
+        {"letter": "C", "label": "Colour", "warn": C, "detail": f"{now['colours']} different shades" if C else f"{now['colours']} shade{'s' if now['colours'] > 1 else ''}"},
+        {"letter": "D", "label": "Diameter",
+         "warn": D, "detail": (f"{d_long or d} mm across (over 6 mm)" if D else f"{d_long or d} mm across (melanomas can still be smaller)")
+         if (d_long or d) is not None else "no coin, size unknown"},
+    ]
+    why, pts = [], 0
+    for item, w in ((A, 12), (B, 12), (C, 15), (D, 15)):
+        pts += w if item else 0
+    if A: why.append("asymmetric shape")
+    if B: why.append("uneven or jagged border")
+    if C: why.append(f"{now['colours']} different colours")
+    if D: why.append(f"larger than 6 mm ({d_long or d} mm)")
     if acral:
         pts += 10; why.append("on a palm, sole or under a nail")
-    # --- how it changed (Evolution) ---
+
+    # ---- E: evolution (measured change) + symptoms the user reports ----
+    e_change, e_items = False, []
     if prev and prev.get("ok"):
-        grew = 0
         if d is not None and prev.get("eq_diameter_mm") is not None:
             dd = d - prev["eq_diameter_mm"]
-            da = (now["area_mm2"] - prev["area_mm2"]) / max(prev["area_mm2"], 1e-6)
-            # judged in millimetres (area % exaggerates tiny moles; ~0.5-1 mm is measurement noise)
-            if dd >= 2 or (da >= 0.5 and dd >= 1):
-                grew = 50
-            elif dd >= 1 or (da >= 0.2 and dd >= 0.7):
-                grew = 35
+            if dd >= 1.0:
+                e_change = True; pts += 35; e_items.append(f"grew {dd:+.1f} mm"); why.append(f"grew {dd:+.1f} mm since last check")
             elif dd >= 0.5:
-                grew = 15
-            if grew:
-                why.append(f"grew {dd:+.1f} mm since last check")
-        else:
-            da = (now["area_pct_of_photo"] - prev["area_pct_of_photo"]) / max(prev["area_pct_of_photo"], 1e-6)
-            if da >= 0.3:
-                grew = 30; why.append("looks bigger than last time (no coin, approximate)")
-        pts += grew
+                pts += 12; e_items.append(f"may have grown {dd:+.1f} mm (near measurement error)")
+                why.append(f"may have grown {dd:+.1f} mm (recheck)")
+        elif (now["area_pct_of_photo"] - prev["area_pct_of_photo"]) / max(prev["area_pct_of_photo"], 1e-6) >= 0.3:
+            e_change = True; pts += 30; e_items.append("looks bigger (no coin)"); why.append("looks bigger than last time (no coin, approximate)")
         new_c = now["colours"] - prev["colours"]
         if new_c > 0:
-            pts += min(35, 25 * new_c); why.append(f"{new_c} new colour{'s' if new_c > 1 else ''}")
-        if now["irregularity"] > prev["irregularity"] * 1.15:
-            pts += 15; why.append("outline became more uneven")
-        if now["asymmetry"] > prev["asymmetry"] + 0.10:
-            pts += 15; why.append("shape became less symmetric")
-        if acral and (grew or new_c > 0):
-            pts += 20; why.append("changing spot on palm/sole/nail")
+            e_change = True; pts += 25; e_items.append(f"{new_c} new colour{'s' if new_c > 1 else ''}"); why.append(f"{new_c} new colour{'s' if new_c > 1 else ''}")
+        if now["irregularity"] > prev["irregularity"] * 1.15 or now["asymmetry"] > prev["asymmetry"] + 0.10:
+            e_change = True; pts += 15; e_items.append("shape/border changed"); why.append("outline became more uneven or less symmetric")
+    bleed = bool(sym.get("bleeds"))          # bleeds, crusts, or a sore that doesn't heal
+    itch = bool(sym.get("itches"))
+    ugly = bool(sym.get("ugly_duckling"))    # looks different from your other moles
+    if bleed: pts += 35; e_items.append("bleeds / crusts / won't heal"); why.append("bleeds, crusts or doesn't heal")
+    if itch: pts += 15; e_items.append("itchy or painful"); why.append("itchy or painful")
+    if ugly: pts += 20; e_items.append("looks unlike your other moles"); why.append("looks different from your other moles ('ugly duckling')")
+    first = not (prev and prev.get("ok"))
+    checklist.append({"letter": "E", "label": "Evolving", "warn": bool(e_change or bleed or itch or ugly),
+                      "detail": ", ".join(e_items) if e_items else ("first check - recheck to see change" if first else "no change measured")})
+
+    # ---- level: clinical rules first, the score only fills the bar ----
+    if e_change or bleed or abcd >= 2 or (acral and (abcd >= 1 or itch or ugly)):
+        level = "high"
+    elif abcd == 1 or itch or ugly or acral or any("may have grown" in w for w in why):
+        level = "medium"
+    else:
+        level = "low"
     score = int(min(100, pts))
-    level = "high" if score >= 60 else "medium" if score >= 30 else "low"
-    return {"score": score, "level": level, "reasons": why,
-            "note": "Based on warning signs (size, colours, outline, change over time). Not a cancer test."}
+    score = max(score, 65) if level == "high" else max(min(score, 59), 35) if level == "medium" else min(score, 29)
+    return {"score": score, "level": level, "reasons": why, "checklist": checklist,
+            "note": "Based on the ABCDE warning signs doctors use. Not a cancer test: melanomas can be small or look ordinary, "
+                    "so see a doctor anytime a spot worries you."}
