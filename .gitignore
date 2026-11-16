@@ -52,3 +52,6 @@ docs/*.pdf
 
 # pitch deck, demo photos and script stay local
 pitch/
+
+# downloaded datasets stay local
+downloads/

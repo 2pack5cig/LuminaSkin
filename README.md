@@ -1,85 +1,132 @@
 # LuminaSkin
 
-**Explainable, multimodal skin-rash triage built for Indian and darker skin tones.**
+**A careful first look at a skin rash, built and tested for Indian and darker skin.**
 
-Take up to 3 photos of a rash (close-up, angle, distance), tap a few yes/no questions, and LuminaSkin shows:
-
-- the **3 most likely of 15 conditions**, with an "eczema family" grouping
-- a **Grad-CAM++ heatmap** of where the AI looked
-- **red-flag safety banners** from fixed clinical rules (independent of the AI)
-- a strict **"don't self-medicate" banner** against over-the-counter steroid/combination creams and antibiotics
-- **follow-up questions** chosen from the AI's top 3 that add hints and **"could also be"** cards (chickenpox, heat rash, drug reaction, leprosy…) without changing the AI's ranking
-- a **scabies screen** from clinical criteria, a **leprosy (numb patch)** check, and steroid / child / pregnancy cards
-- condition info, **Soothing Care** tips, a private **scan history** on the phone, and a detailed **doctor PDF**
-- a **Spot tracker**: measure a mole or rash patch with a coin for scale (mm, area, colours, outline) and recheck it over
-  time; growth, new colours or a more uneven outline are flagged (a measurement aid, not a skin-cancer test)
+Take a photo of a rash on your phone, tap a few yes/no questions, and LuminaSkin tells you the most likely conditions,
+whether anything looks urgent, which medicines to avoid, and when to see a doctor. It can also track a mole over time.
 
 > ⚠️ **LuminaSkin is a triage aid, not a diagnosis.** It has not been clinically validated. Always consult a qualified doctor.
 
-## Conditions (15)
-Acne · Contact dermatitis · Eczema · Folliculitis · Herpes simplex · Herpes zoster (shingles) · Impetigo · Insect bite ·
-Pityriasis rosea · Psoriasis · Scabies · Tinea (ringworm) · Tinea versicolor · Urticaria (hives) · Vitiligo
+---
 
-## How it works
+## Why we built it
+
+- Most skin AI is trained on **light skin**. On brown and dark skin, a rash often looks purple or brown instead of red, so these tools miss it.
+- In India, people often buy **steroid creams over the counter**. On fungal infections (ringworm) these make the rash spread and harder to treat.
+- Serious problems such as **leprosy (a numb patch)**, **shingles near the eye** or **severe allergic reactions** need a doctor fast.
+
+## What it does
+
+| Feature | What the user sees |
+|---|---|
+| **Rash check** | Up to 3 photos + quick questions → the **3 most likely of 15 conditions**, with a **heatmap** of where the AI looked |
+| **Safety warnings** | Fixed medical rules (not AI) for emergencies, e.g. swollen lips, trouble breathing, rash near the eye, a numb patch |
+| **Medicines to avoid** | A clear "don't use without a prescription" notice for steroid creams and antibiotics |
+| **"Not confident"** | If the AI isn't sure, it hides its guesses and says *see a doctor* |
+| **Not a rash?** | Photos that don't look like skin (a mug, a table) are refused |
+| **Follow-up questions** | 2–4 extra questions that give hints and "could also be" cards (e.g. chickenpox), without changing the AI's answer |
+| **Spot tracker** | Measure a mole with a coin for scale, recheck it over time, and get a **concern bar** based on the ABCDE warning signs doctors use |
+| **Doctor PDF & history** | A report to show a doctor; past scans and tracked spots stay **on the phone** |
+
+**The 15 conditions:** Acne · Contact dermatitis · Eczema · Folliculitis · Herpes simplex (cold sores) · Herpes zoster (shingles) ·
+Impetigo · Insect bite · Pityriasis rosea · Psoriasis · Scabies · Tinea (ringworm) · Tinea versicolor · Urticaria (hives) · Vitiligo
+
+## How well it works
+
+Tested on **patients the model never saw** (split by patient, test set used once):
+
+| | Right answer in the top 3 |
+|---|---|
+| Indian patients (305 cases) | **90.8%** |
+| Brown / dark skin (Fitzpatrick IV–VI) | **89.1%**, the same as lighter skin (89.4%) |
+| Indian patients, before → after adding Indian data | **69% → 91%** |
+
+Limitations: only 8 test cases of the very darkest skin type, labels come from dermatologists looking at photos, and it is not clinically validated.
+
+## How it works (in short)
+
 ```
-Phone (Next.js PWA) ──/api──► FastAPI on the laptop
-  1. photo quality gate (blur at fixed scale, darkness; glare = warning only), tuned on dermatologist-approved photos
-  2. "not skin / unusual photo" gate: nearest-neighbour distance to real rash photos in Derm Foundation space
-  3. Google Derm Foundation → 6,144-number embedding → logistic regression
-  4. EfficientNet-B0 on pixels (+ Grad-CAM++ heatmap)
-  5. symptom model (gradient-boosted trees on SCIN's yes/no questions)
-  6. late fusion: weighted log-linear pool (works with or without symptoms) → "not confident" threshold
-  7. fixed rules: red flags, self-medication warning, scabies screen, alerts → follow-up questions → hints
-Spot tracker (/spots): coin detection (Hough circles) → lighting-corrected spot outline from the tapped point
-  → size / area / colours / outline → compare with the previous check (+ Derm Foundation "same spot?" similarity)
+ Phone browser  ──►  Website (Next.js)  ──►  Analysis server (Python, on our laptop)
+                                              1. Is the photo sharp and bright enough?
+                                              2. Does it look like a skin rash at all?
+                                              3. Three AI models look at it and the answers:
+                                                   • Google Derm Foundation (a skin-image model)
+                                                   • EfficientNet (a small image model, gives the heatmap)
+                                                   • a symptom model (uses the yes/no answers)
+                                              4. Their answers are combined → top 3, or "not confident"
+                                              5. Fixed safety rules + follow-up questions run alongside
 ```
 
-## Results (v3, held-out test, split by patient, evaluated once)
+**Privacy:** photos are analysed in memory and never saved on the server. The AI runs on our own machine (no cloud AI).
+Scan history and tracked spots stay on the user's phone. There's no login and no tracking.
 
-| Test set | Cases | Top-3 correct | Top-1 | Macro recall |
-|---|---|---|---|---|
-| **All (SCIN + DermaCon-IN)** | 612 | **89.1%** | 66.7% | 63.9% |
-| **Indian patients (DermaCon-IN)** | 305 | **90.8%** | 75.4% | 53.7% |
-| Fitzpatrick IV–VI (brown/dark) | 303 | **89.1%** | 70.0% | 51.1% |
-| Fitzpatrick I–III | 301 | 89.4% | 63.8% | 70.6% |
+---
 
-- **Before vs after adding Indian data** (same 235 Indian test cases, same 13 conditions): top-3 **69.4% → 90.6%**, top-1 **34.0% → 72.3%**; Fitzpatrick V–VI top-3 **71.2% → 94.2%**.
-- On the older SCIN test set the new model is about equal overall (top-3 88.2% vs 88.9%) and slightly lower on SCIN dark-skin cases (82.9% vs 85.7%, 70 cases).
-- Adding symptoms: macro recall 60.7% (photo only) → 63.9%.
-- Negative-photo test (67 objects, look-alikes, other skin conditions, bad photos): confident wrong answers fell from **32 → 15** after replacing the out-of-distribution gate (non-skin: 13/23 → 2/23). These photos were also used to choose the gate, so treat as optimistic.
-- **Limitations:** only 8 Fitzpatrick VI test cases; labels are dermatologist opinions from photos; other skin conditions (melasma, moles, warts…) can still get a confident answer; not clinically validated.
-- The shipped model (`ml/models_v3_final`) is v3 retrained on 100% of the data; the scores above are v3's held-out results.
+## What's in this repository
 
-## Data
-- **SCIN** (Google Research): dermatologist-labelled phone photos with patient-reported symptoms.
-- **DermaCon-IN** (Madarkar et al., IIT Hyderabad, 2025; CC BY-NC-SA 4.0; doi:10.7910/DVN/W7OUZM): 3,352 photos from 1,950 South Indian patients used for our conditions (mapping in `ml/data/dermacon_map.json`).
-- Experiments: Fitzpatrick17k (Groh et al., 2021; CC BY-NC-SA 3.0), tried and not shipped.
-- Split: SCIN's original test cases kept for a fair comparison; everything else 70/15/15 by patient (`ml/data/v3/split_v3.json`).
-- Photos and embeddings are **not** included in this repository.
+```
+LuminaSkin/
+├── frontend/            The website people use (Next.js + Tailwind)
+│   ├── app/             Pages: scan, results history ("My scans"), spot tracker ("Spots")
+│   ├── components/      Building blocks of the scan: photo step, questions, follow-ups, result screen
+│   ├── lib/             Talking to the server, the question list, doctor PDF, on-phone storage
+│   └── public/          Landing page (landing.html) and app icon settings
+│
+├── backend/             The analysis server (Python, FastAPI)
+│   ├── app/
+│   │   ├── main.py        The server: receives photos and answers, returns the result
+│   │   ├── models.py      Loads and runs the three AI models + heatmap
+│   │   ├── fusion.py      Combines the models' answers into one
+│   │   ├── quality.py     Photo check: blurry or too dark?
+│   │   ├── ood.py         "Is this even a rash?" check
+│   │   ├── redflags.py    Fixed safety rules (emergencies, scabies screen, leprosy, pregnancy, children)
+│   │   ├── medicines.py   "Medicines to avoid" notice
+│   │   ├── followups.py   Follow-up questions and hints
+│   │   ├── spot.py        Spot tracker: coin detection, mole measurement, ABCDE concern bar
+│   │   └── features.py    The list of symptom questions the AI understands
+│   └── kb/              Plain-language info for each condition (what it is, care tips, when to see a doctor)
+│
+├── ml/                  How the AI was trained
+│   ├── v3_*.py          Current training steps: prepare data → image features → train → combine → final model
+│   ├── models_v3_final/ The model the app uses
+│   ├── models_v3/       Test results for the current model
+│   ├── make_negatives.py  Builds the "not a rash" test photos
+│   └── (other files)    Earlier versions, kept for reference
+│
+└── docs/src/            Source for the project summary and study guide (PDFs are made locally)
+```
 
-## Run it
-**Backend** (Python 3.11, macOS/Linux):
+Training photos, image features and API keys are **not** included in this repository.
+
+## Run it yourself
+
+You need Python 3.11, Node.js, and a free Hugging Face account with access to `google/derm-foundation`.
+
+**1. Analysis server**
 ```bash
 python3.11 -m venv .venv && .venv/bin/pip install -r backend/requirements.txt
-echo "HF_TOKEN=<Hugging Face token with access to google/derm-foundation>" > backend/.env
-cd backend && ../.venv/bin/uvicorn app.main:app --port 8000      # uses ml/models_v3_final by default
+echo "HF_TOKEN=<your Hugging Face token>" > backend/.env
+cd backend && ../.venv/bin/uvicorn app.main:app --port 8000
 ```
-**Frontend**:
+
+**2. Website** (in a second terminal)
 ```bash
 cd frontend && npm install && npm run dev -- -H 0.0.0.0
 ```
-Open `http://<laptop-ip>:3000` (landing page) or `/scan` on a phone on the same Wi-Fi.
 
-**Re-train v3:** `ml/v3_prepare.py` → `ml/v3_embed.py` → `ml/v3_train_effnet.py` → `ml/v3_fit.py` → `ml/v3_final.py`.
+Open `http://localhost:3000` on the laptop, or `http://<laptop-ip>:3000` on a phone on the same Wi-Fi.
 
-## Repository
-```
-frontend/   Next.js + Tailwind web app (landing page, scan flow, results, history, doctor PDF)
-backend/    FastAPI: quality + OOD gates, models, Grad-CAM, red flags, medicine warning, follow-ups, spot tracker, disease info (kb/)
-docs/       sources for the project summary + study guide (PDFs are generated locally, not committed)
-ml/         data preparation, training and evaluation scripts; live model in ml/models_v3_final/
-```
+<details>
+<summary>Retraining the model (advanced)</summary>
 
-## Credits
-SCIN dataset © Google. DermaCon-IN © Madarkar et al., IIT Hyderabad (CC BY-NC-SA 4.0). Fitzpatrick17k © Groh et al. (CC BY-NC-SA 3.0).
-Derm Foundation by Google Health AI Developer Foundations. Negative test photos from Wikimedia Commons (licences listed in `ml/data/negatives/sources.csv`).
+Download the datasets (see below), then run in order:
+`ml/v3_prepare.py` → `ml/v3_embed.py` → `ml/v3_train_effnet.py` → `ml/v3_fit.py` → `ml/v3_final.py`.
+</details>
+
+## Data and credits
+
+- **SCIN** (Google Research): phone photos with patients' own symptom answers, labelled by dermatologists.
+- **DermaCon-IN** (Madarkar et al., IIT Hyderabad, 2025; CC BY-NC-SA 4.0): photos from South Indian dermatology clinics, skin types III–VI.
+- **Derm Foundation** by Google Health AI Developer Foundations.
+- Fitzpatrick17k (Groh et al., 2021) was tried during development and **not** used in the final model.
+- "Not a rash" test photos and demo photos: Wikimedia Commons (free licences).
