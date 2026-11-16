@@ -100,7 +100,14 @@ Training photos, image features and API keys are **not** included in this reposi
 
 ## Run it yourself
 
-You need Python 3.11, Node.js, and a free Hugging Face account with access to `google/derm-foundation`.
+**You need:**
+- **Python 3.11** (exactly 3.11, newer or older versions may not install the libraries)
+- **Node.js** (version 18 or newer)
+- A free **Hugging Face** account: open [google/derm-foundation](https://huggingface.co/google/derm-foundation), accept the terms,
+  then create a token under *Settings → Access Tokens*
+- About **5 GB** of free disk space. The first start downloads Google's skin model (~2 GB).
+
+### Mac / Linux
 
 **1. Analysis server**
 ```bash
@@ -114,7 +121,37 @@ cd backend && ../.venv/bin/uvicorn app.main:app --port 8000
 cd frontend && npm install && npm run dev -- -H 0.0.0.0
 ```
 
-Open `http://localhost:3000` on the laptop, or `http://<laptop-ip>:3000` on a phone on the same Wi-Fi.
+### Windows
+
+Use **Command Prompt** (search "cmd" in the Start menu) and run these from the project folder.
+
+**1. Analysis server**
+```bat
+py -3.11 -m venv .venv
+.venv\Scripts\pip install -r backend\requirements.txt
+echo HF_TOKEN=hf_YOURTOKEN> backend\.env
+cd backend
+..\.venv\Scripts\uvicorn app.main:app --port 8000
+```
+
+**2. Website** (open a second Command Prompt in the project folder)
+```bat
+cd frontend
+npm install
+npm run dev -- -H 0.0.0.0
+```
+
+Windows tips:
+- No `py` command? Install Python 3.11 from [python.org](https://www.python.org/downloads/) and tick **"Add python.exe to PATH"**.
+- In the `echo` line, replace `hf_YOURTOKEN` with your token, keeping **no space** before `>` (otherwise the token ends with a space).
+- If Windows Firewall asks, click **Allow** so phones on your Wi-Fi can reach the site.
+- On a normal laptop each scan takes a few seconds, because everything runs on the processor.
+
+### Open it
+
+Wait until the server window says **"Models ready"** and the website window says **"Ready"**, then open
+`http://localhost:3000`. To use a phone on the same Wi-Fi, open `http://<laptop-ip>:3000`
+(find the laptop's IP with `ipconfig` on Windows, or in Wi-Fi settings on a Mac).
 
 <details>
 <summary>Retraining the model (advanced)</summary>
